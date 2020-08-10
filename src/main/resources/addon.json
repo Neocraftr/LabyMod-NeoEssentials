@@ -1,0 +1,10 @@
+{
+  "uuid": "%uuid%",
+  "name": "NeoEssentials",
+  "mainClass": "me.dominic.neoessentials.Main",
+  "description": "Adds some useful functions to LabyMod.",
+  "version": 1,
+  "author": "Neocraftr",
+  "category": 2,
+  "icon": "https://minotar.net/avatar/fe2b30271d4c474abe242fc3f1e6f143"
+}
