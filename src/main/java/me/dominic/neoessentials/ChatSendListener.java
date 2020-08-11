@@ -5,16 +5,12 @@ import net.minecraft.event.ClickEvent;
 import net.minecraft.event.HoverEvent;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatStyle;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.IChatComponent;
 
 import java.awt.*;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Iterator;
-import java.util.List;
 import java.util.StringJoiner;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -76,12 +72,9 @@ public class ChatSendListener implements MessageSendEvent {
             return true;
         }
         // Money Stats
-        if(args[0].equalsIgnoreCase((".moneystats"))) {
-            if(args.length == 1) {
-
-            } else {
-
-            }
+        if(args[0].equalsIgnoreCase(".moneystats")) {
+            //Utils.updateMoneyStats(10);
+            //Main.instance.getApi().displayMessageInChat(String.valueOf(Utils.moneyStats));
         }
         // UUID
         if(args[0].equalsIgnoreCase(".uuid")) {
@@ -95,7 +88,7 @@ public class ChatSendListener implements MessageSendEvent {
                     }
                 }).start();
             } else {
-                Main.instance.getApi().displayMessageInChat(Main.prefix+"§cVerwendung: .uuid <name>");
+                Main.instance.getApi().displayMessageInChat(Main.prefix+"§cVerwendung: .uuid <Name>");
             }
             return true;
         }
@@ -123,6 +116,109 @@ public class ChatSendListener implements MessageSendEvent {
                 Utils.mc.thePlayer.addChatComponentMessage(new ChatComponentText(Main.prefix+"§aLogdatei erstellt: ").appendSibling(fileLink));
             } catch (IOException e) {
                 e.printStackTrace();
+            }
+            return true;
+        }
+        // Schedules
+        if(args[0].equalsIgnoreCase(".schedule")) {
+            if(args.length >= 2) {
+                if(args[1].equalsIgnoreCase("create")) {
+                    if(args.length >= 5) {
+                        long interval = Utils.parseTime(args[2]);
+                        if(interval == -1) {
+                            Main.instance.getApi().displayMessageInChat(Main.prefix+"§cDas Interval muss größer als Null sein.");
+                        } else if(interval == -2) {
+                            Main.instance.getApi().displayMessageInChat(Main.prefix+"§cGültige Zeiteinheiten: §es - Sekunde§8, §em - Minute§8, §eh - Stunde§8, §ed - Tag§8");
+                        } else if(interval == -3) {
+                            Main.instance.getApi().displayMessageInChat(Main.prefix+"§cUngültiges Interval. Beispiel: 10s");
+                        } else {
+                            StringJoiner joiner = new StringJoiner(" ");
+                            for(int i=4; i<args.length; i++) {
+                                joiner.add(args[i]);
+                            }
+                            Schedule schedule = new Schedule(interval, Boolean.parseBoolean(args[3]), joiner.toString());
+                            schedule.start();
+                            Main.instance.getApi().displayMessageInChat(Main.prefix+"§aNeue Aufgabe erstellt:" +
+                                    "\n§eInterval: §a"+Utils.formatTime(schedule.getInterval()) +
+                                    "\n§eWiederholen: §a"+schedule.isRepeat() +
+                                    "\n§eNachricht: §a"+schedule.getMessage());
+                        }
+                    } else {
+                        Main.instance.getApi().displayMessageInChat(Main.prefix+"§cVerwendung: .schedule create <Verzögerung/Interval> <Wiederholen> <Nachricht/Befehl>");
+                    }
+                } else if(args[1].equalsIgnoreCase("delete")) {
+                    if(args.length == 3) {
+                        try {
+                            int scheduleNr = Integer.parseInt(args[2]);
+                            if(scheduleNr > 0 && scheduleNr <= Schedule.getSchedules().size()) {
+                                Schedule.getSchedules().get(scheduleNr - 1).destroy();
+                                Main.instance.getApi().displayMessageInChat(Main.prefix+"§aAufgabe §e"+scheduleNr+" §agelöscht.");
+                            } else {
+                                Main.instance.getApi().displayMessageInChat(Main.prefix+"§cKeine Aufgabe mit dieser Nummer gefunden.");
+                            }
+                        } catch(NumberFormatException e) {
+                            Main.instance.getApi().displayMessageInChat(Main.prefix+"§cKeine Aufgabe mit dieser Nummer gefunden.");
+                        }
+                    } else {
+                        Main.instance.getApi().displayMessageInChat(Main.prefix+"§cVerwendung: .schedule delete <Aufgabennummer>");
+                    }
+                } else if(args[1].equalsIgnoreCase("list")) {
+                    if(Schedule.getSchedules().size() > 0) {
+                        StringBuilder builder = new StringBuilder();
+                        builder.append(Main.prefix+"§aAktuelle Aufgaben:");
+                        for(int i=0; i<Schedule.getSchedules().size(); i++) {
+                            Schedule schedule = Schedule.getSchedules().get(i);
+                            builder.append("\n§8- §a"+(i+1)+" §7| §e"+Utils.formatTime(schedule.getInterval())+(schedule.isRepeat() ? " ∞" : "")+" "+(schedule.isRunning() ? "§aLäuft" : "§cGestoppt")+" §7>> §a"+schedule.getMessage());
+                        }
+                        Main.instance.getApi().displayMessageInChat(builder.toString());
+                    } else {
+                        Main.instance.getApi().displayMessageInChat(Main.prefix+"§cDie Liste der Aufgaben ist leer.");
+                    }
+                } else if(args[1].equalsIgnoreCase("start")) {
+                    if(args.length == 3) {
+                        try {
+                            int scheduleNr = Integer.parseInt(args[2]);
+                            if(scheduleNr > 0 && scheduleNr <= Schedule.getSchedules().size()) {
+                                if(!Schedule.getSchedules().get(scheduleNr - 1).isRunning()) {
+                                    Schedule.getSchedules().get(scheduleNr - 1).start();
+                                    Main.instance.getApi().displayMessageInChat(Main.prefix+"§aAufgabe §e"+scheduleNr+" §agestartet.");
+                                } else {
+                                    Main.instance.getApi().displayMessageInChat(Main.prefix+"§cAufgabe §e"+scheduleNr+" §cläuft bereits.");
+                                }
+                            } else {
+                                Main.instance.getApi().displayMessageInChat(Main.prefix+"§cKeine Aufgabe mit dieser Nummer gefunden.");
+                            }
+                        } catch(NumberFormatException e) {
+                            Main.instance.getApi().displayMessageInChat(Main.prefix+"§cKeine Aufgabe mit dieser Nummer gefunden.");
+                        }
+                    } else {
+                        Main.instance.getApi().displayMessageInChat(Main.prefix+"§cVerwendung: .schedule start <Aufgabennummer>");
+                    }
+                } else if(args[1].equalsIgnoreCase("stop")) {
+                    if(args.length == 3) {
+                        try {
+                            int scheduleNr = Integer.parseInt(args[2]);
+                            if(scheduleNr > 0 && scheduleNr <= Schedule.getSchedules().size()) {
+                                if(Schedule.getSchedules().get(scheduleNr - 1).isRunning()) {
+                                    Schedule.getSchedules().get(scheduleNr - 1).stop();
+                                    Main.instance.getApi().displayMessageInChat(Main.prefix+"§aAufgabe §e"+scheduleNr+" §agestoppt.");
+                                } else {
+                                    Main.instance.getApi().displayMessageInChat(Main.prefix+"§cAufgabe §e"+scheduleNr+" §cist bereits gestoppt.");
+                                }
+                            } else {
+                                Main.instance.getApi().displayMessageInChat(Main.prefix+"§cKeine Aufgabe mit dieser Nummer gefunden.");
+                            }
+                        } catch(NumberFormatException e) {
+                            Main.instance.getApi().displayMessageInChat(Main.prefix+"§cKeine Aufgabe mit dieser Nummer gefunden.");
+                        }
+                    } else {
+                        Main.instance.getApi().displayMessageInChat(Main.prefix+"§cVerwendung: .schedule stop <Aufgabennummer>");
+                    }
+                } else {
+                    Main.instance.getApi().displayMessageInChat(Main.prefix+"§cVerwendung: .schedule <create|delete|list|start|stop> [...]");
+                }
+            } else {
+                Main.instance.getApi().displayMessageInChat(Main.prefix+"§cVerwendung: .schedule <create|delete|list|start|stop> [...]");
             }
             return true;
         }

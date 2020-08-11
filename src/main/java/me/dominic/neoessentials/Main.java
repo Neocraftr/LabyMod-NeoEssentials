@@ -33,6 +33,7 @@ public class Main extends LabyModAddon {
             getConfig().addProperty("autoColor", "");
             saveConfig();
         }
+
         Utils.autoColor = getConfig().get("autoColor").getAsString();
     }
 

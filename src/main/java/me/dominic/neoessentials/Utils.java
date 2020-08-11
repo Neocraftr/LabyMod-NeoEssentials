@@ -16,6 +16,7 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
 public class Utils {
@@ -27,11 +28,12 @@ public class Utils {
     public static String autoColor = "";
     public static String rainbowColorCodes = "abcdef";
     public static String colorCodes = "0123456789abcdef";
-    public static File addonDir, chatLogDir, chatLogFile, moneyLogFile;
+    public static File addonDir, chatLogDir, chatLogFile;
     public static KeyBinding autoBreakKey, autoUseKey, ungrabMouseKey;
     public static boolean mouseUngrabbed;
     public static boolean originalFocusPauseSetting;
     public static boolean afkMenuOpen;
+    public static double moneyStats;
     public static MouseHelper oldMouseHelper;
     public static ArrayList<String> lastFormatedChatMessages = new ArrayList<>();
 
@@ -68,16 +70,6 @@ public class Utils {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        /*moneyLogFile = new File(addonDir+"/moneylog.json");
-        try {
-            if(!moneyLogFile.exists()) moneyLogFile.createNewFile();
-            JsonReader reader = new JsonReader(new FileReader(moneyLogFile));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }*/
     }
 
     public static void logChatMessage(String msg) {
@@ -90,11 +82,10 @@ public class Utils {
         }
     }
 
-    private class MoneyLog {
-        private HashMap<String, Double> receivedMoney = new HashMap<String, Double>();
-        private HashMap<String, Double> payedMoney = new HashMap<String, Double>();
-
-
+    public static void updateMoneyStats(int value) {
+        moneyStats += value;
+        Main.instance.getConfig().getAsJsonObject("moneystats").addProperty(date, moneyStats);
+        Main.instance.saveConfig();
     }
 
     public static ArrayList<String> getNamesFromUUID(String uuid) {
@@ -172,5 +163,56 @@ public class Utils {
         mc.mouseHelper = oldMouseHelper;
         mc.mouseHelper.grabMouseCursor();
         mouseUngrabbed = false;
+    }
+
+    public static long parseTime(String timeStr) {
+        try {
+            String format = timeStr.substring(timeStr.length() - 1);
+            long duration = Long.parseLong(timeStr.substring(0, timeStr.length() - 1));
+            if(duration < 0) return -1; // lower or equal 0
+            switch (format) {
+                case "s":
+                    duration = duration * 1000;
+                    break;
+                case "m":
+                    duration = duration * 1000 * 60;
+                    break;
+                case "h":
+                    duration = duration * 1000 * 60 * 60;
+                    break;
+                case "d":
+                    duration = duration * 1000 * 60 * 60 * 24;
+                    break;
+                default:
+                    return -2; // unknown format
+            }
+            return duration;
+        } catch (NumberFormatException e) {
+            return -3; // no number
+        }
+    }
+
+    public static String formatTime(long time) {
+        long seconds = time / 1000;
+        if(seconds < 60) {
+            // seconds
+            return String.format("%ds",
+                    TimeUnit.MILLISECONDS.toSeconds(time));
+        } else if(seconds < 3600) {
+            // minutes
+            return String.format("%dmin %ds",
+                    TimeUnit.MILLISECONDS.toMinutes(time),
+                    TimeUnit.MILLISECONDS.toSeconds(time) % TimeUnit.MINUTES.toSeconds(1));
+        } else if(seconds < 86400) {
+            // hours
+            return String.format("%dh %dmin",
+                    TimeUnit.MILLISECONDS.toHours(time),
+                    TimeUnit.MILLISECONDS.toMinutes(time) % TimeUnit.HOURS.toMinutes(1));
+        } else {
+            // days
+            return String.format("%dd %dh",
+                    TimeUnit.MILLISECONDS.toDays(time),
+                    TimeUnit.MILLISECONDS.toHours(time) % TimeUnit.DAYS.toHours(1));
+        }
     }
 }

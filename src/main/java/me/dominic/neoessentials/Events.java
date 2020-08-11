@@ -29,6 +29,7 @@ public class Events {
     @SubscribeEvent
     public void onTick(TickEvent.PlayerTickEvent e) {
         if(e.phase == TickEvent.Phase.START) {
+            Schedule.updateSchedules();
             /*EntityPlayerSP player = Utils.mc.thePlayer;
             Container cont = player.openContainer;
             if(cont instanceof ContainerChest) {
