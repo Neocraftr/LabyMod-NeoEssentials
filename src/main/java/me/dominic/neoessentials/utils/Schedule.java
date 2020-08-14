@@ -1,4 +1,6 @@
-package me.dominic.neoessentials;
+package me.dominic.neoessentials.utils;
+
+import net.minecraft.client.Minecraft;
 
 import java.util.ArrayList;
 
@@ -31,7 +33,7 @@ public class Schedule {
             } else {
                 stop();
             }
-            Utils.mc.thePlayer.sendChatMessage(getMessage());
+            getMC().thePlayer.sendChatMessage(getMessage());
         }
     }
 
@@ -81,5 +83,9 @@ public class Schedule {
 
     public boolean isRunning() {
         return getNextUpdate() != -1;
+    }
+
+    private Minecraft getMC() {
+        return Minecraft.getMinecraft();
     }
 }

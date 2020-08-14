@@ -1,14 +1,13 @@
-package me.dominic.neoessentials;
+package me.dominic.neoessentials.utils;
 
 import com.google.common.base.CharMatcher;
 import com.google.common.io.Resources;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.stream.JsonReader;
+import me.dominic.neoessentials.NeoEssentials;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.util.MouseHelper;
-import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
 import java.io.*;
@@ -19,76 +18,54 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
-public class Utils {
-    public static Minecraft mc;
-    public static Gson gson;
-    public static Random random;
-    public static BufferedWriter chatLogWriter;
-    public static String date;
-    public static String autoColor = "";
-    public static String rainbowColorCodes = "abcdef";
-    public static String colorCodes = "0123456789abcdef";
-    public static File addonDir, chatLogDir, chatLogFile;
-    public static KeyBinding autoBreakKey, autoUseKey, ungrabMouseKey;
-    public static boolean mouseUngrabbed;
-    public static boolean originalFocusPauseSetting;
-    public static boolean afkMenuOpen;
-    public static double moneyStats;
-    public static MouseHelper oldMouseHelper;
-    public static ArrayList<String> lastFormatedChatMessages = new ArrayList<>();
+public class Helper {
 
-    public static String colorize(String msg) {
-        return msg.replace("&", "§");
-    }
+    private BufferedWriter chatLogWriter;
+    private File addonDir, chatLogDir, chatLogFile;
+    private boolean mouseUngrabbed;
+    private boolean originalFocusPauseSetting;
+    private MouseHelper oldMouseHelper;
+    private ArrayList<String> lastFormatedChatMessages = new ArrayList<>();
 
-    public static void init() {
-        mc = Minecraft.getMinecraft();
-        gson = new Gson();
-        random = new Random();
-        date = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
-        autoBreakKey = new KeyBinding("Auto break", Keyboard.KEY_B, "NeoEssentials");
-        autoUseKey = new KeyBinding("Auto use", Keyboard.KEY_U, "NeoEssentials");
-        ungrabMouseKey = new KeyBinding("Ungrab mouse", Keyboard.KEY_F12, "NeoEssentials");
+    public Helper() {
+        setAddonDir(new File("neoessentials"));
+        if(!getAddonDir().exists()) getAddonDir().mkdir();
 
-        addonDir = new File("neoessentials");
-        if(!addonDir.exists()) addonDir.mkdir();
+        setChatLogDir(new File(getAddonDir()+"/chatlog"));
+        if(!getChatLogDir().exists()) getChatLogDir().mkdir();
 
-        chatLogDir = new File(addonDir+"/chatlog");
-        if(!chatLogDir.exists()) chatLogDir.mkdir();
-
-        chatLogFile = new File(chatLogDir+"/"+date+".txt");
-        if(!chatLogFile.exists()) {
+        setChatLogFile(new File(getChatLogDir()+"/"+getNeoEssentials().getCurrentDate()+".txt"));
+        System.out.println(getNeoEssentials().getCurrentDate());
+        if(!getChatLogFile().exists()) {
             try {
-                chatLogFile.createNewFile();
+                getChatLogFile().createNewFile();
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
 
         try {
-            chatLogWriter = new BufferedWriter(new FileWriter(chatLogFile, true));
+            setChatLogWriter(new BufferedWriter(new FileWriter(getChatLogFile(), true)));
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public static void logChatMessage(String msg) {
+    public void logChatMessage(String msg) {
         final String time = new SimpleDateFormat("mm:HH:ss").format(new Date());
         try {
-            chatLogWriter.append("["+time+"] "+msg+"\n");
-            chatLogWriter.flush();
+            getChatLogWriter().append("["+time+"] "+msg+"\n");
+            getChatLogWriter().flush();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public static void updateMoneyStats(int value) {
-        moneyStats += value;
-        Main.instance.getConfig().getAsJsonObject("moneystats").addProperty(date, moneyStats);
-        Main.instance.saveConfig();
+    public static String colorize(String msg) {
+        return msg.replace("&", "§");
     }
 
-    public static ArrayList<String> getNamesFromUUID(String uuid) {
+    public ArrayList<String> getNamesFromUUID(String uuid) {
         ArrayList<String> names = new ArrayList<>();
         try {
             uuid = CharMatcher.is('-').removeFrom(uuid);
@@ -103,13 +80,10 @@ public class Utils {
                     json.beginObject();
                     while (json.hasNext()) {
                         String key = json.nextName();
-                        switch (key) {
-                            case "name":
-                                names.add(json.nextString());
-                                break;
-                            default:
-                                json.skipValue();
-                                break;
+                        if (key.equals("name")) {
+                            names.add(json.nextString());
+                        } else {
+                            json.skipValue();
                         }
                     }
                     json.endObject();
@@ -124,11 +98,10 @@ public class Utils {
         return names;
     }
 
-    public static String getUUIDFromName(String name) {
+    public String getUUIDFromName(String name) {
         try {
             try (BufferedReader reader = Resources.asCharSource(new URL(String.format("https://api.mojang.com/users/profiles/minecraft/%s", name)), StandardCharsets.UTF_8).openBufferedStream()) {
-                System.out.println(reader);
-                JsonObject json = gson.fromJson(reader, JsonObject.class);
+                JsonObject json = new Gson().fromJson(reader, JsonObject.class);
                 if(json == null || !json.has("id")) return null;
                 String uuid = json.get("id").getAsString();
                 return Pattern.compile("(\\w{8})(\\w{4})(\\w{4})(\\w{4})(\\w{12})").matcher(uuid).replaceAll("$1-$2-$3-$4-$5");
@@ -139,14 +112,14 @@ public class Utils {
         return null;
     }
 
-    public static void ungrabMouse() {
-        if(!Mouse.isGrabbed() || mouseUngrabbed) return;
-        originalFocusPauseSetting = mc.gameSettings.pauseOnLostFocus;
-        mc.gameSettings.pauseOnLostFocus = false;
-        oldMouseHelper = mc.mouseHelper;
-        oldMouseHelper.ungrabMouseCursor();
-        mc.inGameHasFocus = true;
-        mc.mouseHelper = new MouseHelper(){
+    public void ungrabMouse() {
+        if(!Mouse.isGrabbed() || isMouseUngrabbed()) return;
+        setOriginalFocusPauseSetting(getMC().gameSettings.pauseOnLostFocus);
+        getMC().gameSettings.pauseOnLostFocus = false;
+        setOldMouseHelper(getMC().mouseHelper);
+        getOldMouseHelper().ungrabMouseCursor();
+        getMC().inGameHasFocus = true;
+        getMC().mouseHelper = new MouseHelper(){
             @Override
             public void mouseXYChange(){}
             @Override
@@ -154,18 +127,18 @@ public class Utils {
             @Override
             public void ungrabMouseCursor(){}
         };
-        mouseUngrabbed = true;
+        setMouseUngrabbed(true);
     }
 
-    public static void regrabMouse() {
-        if(!mouseUngrabbed) return;
-        mc.gameSettings.pauseOnLostFocus = originalFocusPauseSetting;
-        mc.mouseHelper = oldMouseHelper;
-        mc.mouseHelper.grabMouseCursor();
-        mouseUngrabbed = false;
+    public void regrabMouse() {
+        if(!isMouseUngrabbed()) return;
+        getMC().gameSettings.pauseOnLostFocus = isOriginalFocusPauseSetting();
+        getMC().mouseHelper = getOldMouseHelper();
+        getMC().mouseHelper.grabMouseCursor();
+        setMouseUngrabbed(false);
     }
 
-    public static long parseTime(String timeStr) {
+    public long parseTime(String timeStr) {
         try {
             String format = timeStr.substring(timeStr.length() - 1);
             long duration = Long.parseLong(timeStr.substring(0, timeStr.length() - 1));
@@ -214,5 +187,66 @@ public class Utils {
                     TimeUnit.MILLISECONDS.toDays(time),
                     TimeUnit.MILLISECONDS.toHours(time) % TimeUnit.DAYS.toHours(1));
         }
+    }
+
+    private Minecraft getMC() {
+        return Minecraft.getMinecraft();
+    }
+
+    private NeoEssentials getNeoEssentials() {
+        return NeoEssentials.getNeoEssentials();
+    }
+
+    private void setChatLogWriter(BufferedWriter chatLogWriter) {
+        this.chatLogWriter = chatLogWriter;
+    }
+    private BufferedWriter getChatLogWriter() {
+        return chatLogWriter;
+    }
+
+    public void setAddonDir(File addonDir) {
+        this.addonDir = addonDir;
+    }
+    public File getAddonDir() {
+        return addonDir;
+    }
+
+    public void setChatLogDir(File chatLogDir) {
+        this.chatLogDir = chatLogDir;
+    }
+    public File getChatLogDir() {
+        return chatLogDir;
+    }
+
+    public void setChatLogFile(File chatLogFile) {
+        this.chatLogFile = chatLogFile;
+    }
+    public File getChatLogFile() {
+        return chatLogFile;
+    }
+
+    public void setMouseUngrabbed(boolean mouseUngrabbed) {
+        this.mouseUngrabbed = mouseUngrabbed;
+    }
+    public boolean isMouseUngrabbed() {
+        return mouseUngrabbed;
+    }
+
+    public void setOriginalFocusPauseSetting(boolean originalFocusPauseSetting) {
+        this.originalFocusPauseSetting = originalFocusPauseSetting;
+    }
+    public boolean isOriginalFocusPauseSetting() {
+        return originalFocusPauseSetting;
+    }
+
+    public void setOldMouseHelper(MouseHelper oldMouseHelper) {
+        this.oldMouseHelper = oldMouseHelper;
+    }
+    public MouseHelper getOldMouseHelper() {
+        return oldMouseHelper;
+    }
+
+    public ArrayList<String> getLastFormatedChatMessages() {
+        return lastFormatedChatMessages;
     }
 }

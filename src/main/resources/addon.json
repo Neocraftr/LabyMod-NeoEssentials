@@ -1,7 +1,7 @@
 {
   "uuid": "%uuid%",
   "name": "NeoEssentials",
-  "mainClass": "me.dominic.neoessentials.Main",
+  "mainClass": "me.dominic.neoessentials.NeoEssentials",
   "description": "Adds some useful functions to LabyMod.",
   "version": 1,
   "author": "Neocraftr",
