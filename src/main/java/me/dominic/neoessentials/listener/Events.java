@@ -1,5 +1,6 @@
 package me.dominic.neoessentials.listener;
 
+import me.dominic.neoessentials.settings.Settings;
 import me.dominic.neoessentials.utils.Helper;
 import me.dominic.neoessentials.NeoEssentials;
 import me.dominic.neoessentials.utils.Schedule;
@@ -19,15 +20,15 @@ public class Events {
 
     @SubscribeEvent
     public void onKeyInput(InputEvent.KeyInputEvent e) {
-        if(Keyboard.isKeyDown(getNeoEssentials().getSettings().getAutoBreakKey())) {
+        if(getSettings().getAutoBreakKey() != -1 && Keyboard.isKeyDown(getSettings().getAutoBreakKey())) {
             boolean state = !getMC().gameSettings.keyBindAttack.isKeyDown();
             KeyBinding.setKeyBindState(getMC().gameSettings.keyBindAttack.getKeyCode(), state);
         }
-        if(Keyboard.isKeyDown(getNeoEssentials().getSettings().getAutoUseKey())) {
+        if(getSettings().getAutoUseKey() != -1 && Keyboard.isKeyDown(getSettings().getAutoUseKey())) {
             boolean state = !getMC().gameSettings.keyBindUseItem.isKeyDown();
             KeyBinding.setKeyBindState(getMC().gameSettings.keyBindUseItem.getKeyCode(), state);
         }
-        if(Keyboard.isKeyDown(getNeoEssentials().getSettings().getUngrabMouseKey())) {
+        if(getSettings().getUngrabMouseKey() != -1 && Keyboard.isKeyDown(getSettings().getUngrabMouseKey())) {
             if(getHelper().isMouseUngrabbed()) {
                 getHelper().regrabMouse();
             } else {
@@ -60,7 +61,7 @@ public class Events {
 
     @SubscribeEvent
     public void onJoin(FMLNetworkEvent.ClientConnectedToServerEvent e) {
-        if(getNeoEssentials().getSettings().isBypassServerPermissions()) {
+        if(getSettings().isBypassServerPermissions()) {
             new Timer().schedule(new TimerTask() {
                 @Override
                 public void run() {
@@ -85,5 +86,9 @@ public class Events {
 
     private Helper getHelper() {
         return NeoEssentials.getNeoEssentials().getHelper();
+    }
+
+    private Settings getSettings() {
+        return NeoEssentials.getNeoEssentials().getSettings();
     }
 }

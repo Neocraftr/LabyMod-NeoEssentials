@@ -35,7 +35,6 @@ public class Helper {
         if(!getChatLogDir().exists()) getChatLogDir().mkdir();
 
         setChatLogFile(new File(getChatLogDir()+"/"+getNeoEssentials().getCurrentDate()+".txt"));
-        System.out.println(getNeoEssentials().getCurrentDate());
         if(!getChatLogFile().exists()) {
             try {
                 getChatLogFile().createNewFile();

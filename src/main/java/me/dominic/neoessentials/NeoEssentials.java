@@ -1,8 +1,6 @@
 package me.dominic.neoessentials;
 
-import me.dominic.neoessentials.listener.ChatReceiveListener;
-import me.dominic.neoessentials.listener.ChatSendListener;
-import me.dominic.neoessentials.listener.Events;
+import me.dominic.neoessentials.listener.*;
 import me.dominic.neoessentials.settings.Settings;
 import me.dominic.neoessentials.utils.Helper;
 import net.labymod.api.LabyModAddon;
@@ -10,17 +8,21 @@ import net.labymod.settings.elements.SettingsElement;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 
 public class NeoEssentials extends LabyModAddon {
 
-    public static final String PREFIX = "§8[§2NeoEssentials§8] §7";
+    public static final String PREFIX = "§8[§2NeoEssentials§8] §7",
+                               COMMAND_PREFIX = ".";
 
     private static NeoEssentials neoEssentials;
     private Helper helper;
     private Settings settings;
     private String currentDate;
+    private Set<ClientCommandEvent> commandListeners = new HashSet<>();
 
     @Override
     public void onEnable() {
@@ -32,6 +34,7 @@ public class NeoEssentials extends LabyModAddon {
         getApi().getEventManager().register(new ChatSendListener());
         getApi().getEventManager().register(new ChatReceiveListener());
         getApi().registerForgeListener(new Events());
+        registerEvent(new CommandListener());
     }
 
     @Override
@@ -42,6 +45,10 @@ public class NeoEssentials extends LabyModAddon {
     @Override
     protected void fillSettings(List<SettingsElement> settings) {
         getSettings().fillSettings(settings);
+    }
+
+    public void registerEvent(ClientCommandEvent listener) {
+        getCommandListeners().add(listener);
     }
 
     public static void setNeoEssentials(NeoEssentials neoEssentials) {
@@ -70,5 +77,12 @@ public class NeoEssentials extends LabyModAddon {
     }
     public String getCurrentDate() {
         return currentDate;
+    }
+
+    public void setCommandListeners(Set<ClientCommandEvent> commandListeners) {
+        this.commandListeners = commandListeners;
+    }
+    public Set<ClientCommandEvent> getCommandListeners() {
+        return commandListeners;
     }
 }
