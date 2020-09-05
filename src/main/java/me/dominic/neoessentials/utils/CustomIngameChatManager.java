@@ -4,7 +4,7 @@ import net.labymod.core.ChatComponent;
 import net.labymod.core.LabyModCore;
 import net.labymod.ingamechat.IngameChatManager;
 import net.labymod.ingamechat.renderer.MessageData;
-import net.labymod.ingamechat.tools.filter.Filters;
+import net.labymod.ingamechat.tools.filter.Filters.Filter;
 import net.labymod.main.LabyMod;
 import net.labymod.servermanager.ChatDisplayAction;
 import net.minecraft.util.ResourceLocation;
@@ -13,7 +13,7 @@ public class CustomIngameChatManager extends IngameChatManager {
 
     @Override
     public MessageData handleSwap(ChatDisplayAction chatDisplayAction, ChatComponent chatComponent) {
-        Filters.Filter filter = CustomFilterChatManager.getFilterComponent(chatComponent);
+        Filter filter = CustomFilterChatManager.getFilterComponent(chatComponent);
         if (chatDisplayAction == ChatDisplayAction.NORMAL && filter != null && filter.isDisplayInSecondChat()) {
             chatDisplayAction = ChatDisplayAction.SWAP;
         }

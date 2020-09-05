@@ -2,7 +2,6 @@ package me.dominic.neoessentials.utils;
 
 
 import net.labymod.core.ChatComponent;
-import net.labymod.ingamechat.tools.filter.FilterChatManager;
 import net.labymod.ingamechat.tools.filter.Filters.Filter;
 import net.labymod.main.LabyMod;
 import net.labymod.utils.ModColor;
@@ -12,7 +11,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
-public class CustomFilterChatManager extends FilterChatManager {
+public class CustomFilterChatManager {
 
     public static Filter getFilterComponent(ChatComponent chatComponent) {
         if (!LabyMod.getSettings().chatFilter) {
