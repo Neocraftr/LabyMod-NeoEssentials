@@ -72,9 +72,6 @@ public class Helper {
                 JsonReader json = new JsonReader(reader);
                 json.beginArray();
 
-                String name = null;
-                long when = 0;
-
                 while (json.hasNext()) {
                     json.beginObject();
                     while (json.hasNext()) {

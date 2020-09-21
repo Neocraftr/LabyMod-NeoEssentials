@@ -11,7 +11,7 @@ public class ChatReceiveListener implements MessageReceiveEvent {
         getNeoEssentials().getHelper().logChatMessage(msg);
 
         getHelper().getLastFormatedChatMessages().add(msgRaw);
-        while(getHelper().getLastFormatedChatMessages().size() > 20) {
+        while(getHelper().getLastFormatedChatMessages().size() > 60) {
             getHelper().getLastFormatedChatMessages().remove(0);
         }
 
