@@ -1,7 +1,7 @@
 # NeoEssentials
 Adds some useful things to labymod.
 
-Features:
+#### Features:
 - Automatically write color code before each chat message.
 - Key to toggle build / break.
 - Key to ungrab mouse.
@@ -9,7 +9,7 @@ Features:
 - Option to bypass GrieferGames afk menu. (you may be banned for using)
 - Chat logging
 
-Commands:
+#### Commands:
 - **\/rainbow \<message\>** - Send message in rainbow colors.
 - **\/chatlog** - Open the current chatlog.
 - **\/colordebug** - Save the last 60 chat messages with colors. (for debug purposes)
