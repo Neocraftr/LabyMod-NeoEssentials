@@ -20,7 +20,7 @@ public class NeoEssentials extends LabyModAddon {
 
     public static final String PREFIX = "§8[§2NeoEssentials§8] §7",
                                COMMAND_PREFIX = ".";
-
+    
     private static NeoEssentials neoEssentials;
     private Helper helper;
     private Settings settings;

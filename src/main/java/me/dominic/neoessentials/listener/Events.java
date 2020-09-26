@@ -6,7 +6,11 @@ import me.dominic.neoessentials.NeoEssentials;
 import me.dominic.neoessentials.utils.Schedule;
 import net.labymod.main.LabyMod;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.settings.KeyBinding;
+import net.minecraft.inventory.Container;
+import net.minecraft.inventory.ContainerChest;
+import net.minecraft.inventory.IInventory;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
@@ -17,6 +21,8 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class Events {
+
+    private boolean afkMenuOpen;
 
     @SubscribeEvent
     public void onKeyInput(InputEvent.KeyInputEvent e) {
@@ -41,21 +47,27 @@ public class Events {
     public void onTick(TickEvent.PlayerTickEvent e) {
         if(e.phase == TickEvent.Phase.START) {
             Schedule.updateSchedules();
-            /*EntityPlayerSP player = Utils.mc.thePlayer;
-            Container cont = player.openContainer;
-            if(cont instanceof ContainerChest) {
-                if(!Utils.afkMenuOpen) {
-                    ContainerChest chest = ((ContainerChest) cont);
-                    IInventory inv = chest.getLowerChestInventory();
-                    if(inv.getName().equals("§cAfk?")) {
-                        cont.slotClick(0, 0, 0, player);
-                        System.out.println("AFK menu");
-                        Utils.afkMenuOpen = true;
+            if(getSettings().isAntiAfkKick()) {
+                EntityPlayerSP player = Minecraft.getMinecraft().thePlayer;
+                Container cont = player.openContainer;
+                if(cont instanceof ContainerChest) {
+                    if(!afkMenuOpen) {
+                        ContainerChest chest = ((ContainerChest) cont);
+                        IInventory inv = chest.getLowerChestInventory();
+                        if(inv.getName().equals("§cAfk?")) {
+                            afkMenuOpen = true;
+                            new Timer().schedule(new TimerTask() {
+                                @Override
+                                public void run() {
+                                    Minecraft.getMinecraft().playerController.windowClick(chest.windowId, 0,0, 0, player);
+                                }
+                            }, 1000);
+                        }
                     }
+                } else {
+                    afkMenuOpen = false;
                 }
-            } else {
-                Utils.afkMenuOpen = false;
-            }*/
+            }
         }
     }
 

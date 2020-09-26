@@ -22,6 +22,7 @@ public class Settings {
     private int autoUseKey = Keyboard.KEY_U;
     private int ungrabMouseKey = Keyboard.KEY_F12;
     private boolean bypassServerPermissions = false;
+    private boolean antiAfkKick = false;
 
     public void loadSettings() {
         if(!getConfig().has("autoColorIgnoreMessages"))
@@ -48,6 +49,9 @@ public class Settings {
 
         if(getConfig().has("bypassServerPermissons"))
             setBypassServerPermissions(getConfig().get("bypassServerPermissons").getAsBoolean());
+
+        if(getConfig().has("antiAfkKick"))
+            setAntiAfkKick(getConfig().get("antiAfkKick").getAsBoolean());
     }
 
     public void fillSettings(List<SettingsElement> settings) {
@@ -108,6 +112,19 @@ public class Settings {
             }
         }, isBypassServerPermissions());
         settings.add(bypassServerPermissionsBtn);
+
+        settings.add(new HeaderElement("GrieferGames"));
+
+        final BooleanElement antiAfkKickBtn = new BooleanElement("Anti AFK kick",
+                new ControlElement.IconData(Material.EMERALD), new Consumer<Boolean>() {
+            @Override
+            public void accept(Boolean antiAfkKick) {
+                setAntiAfkKick(antiAfkKick);
+                getConfig().addProperty("antiAfkKick", antiAfkKick);
+                saveConfig();
+            }
+        }, isAntiAfkKick());
+        settings.add(antiAfkKickBtn);
     }
 
     private JsonObject getConfig() {
@@ -158,5 +175,12 @@ public class Settings {
     }
     public boolean isBypassServerPermissions() {
         return bypassServerPermissions;
+    }
+
+    public void setAntiAfkKick(boolean antiAfkKick) {
+        this.antiAfkKick = antiAfkKick;
+    }
+    public boolean isAntiAfkKick() {
+        return antiAfkKick;
     }
 }
