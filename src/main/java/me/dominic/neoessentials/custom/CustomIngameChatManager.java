@@ -1,4 +1,4 @@
-package me.dominic.neoessentials.utils;
+package me.dominic.neoessentials.custom;
 
 import net.labymod.core.ChatComponent;
 import net.labymod.core.LabyModCore;

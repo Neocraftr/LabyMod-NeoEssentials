@@ -80,7 +80,7 @@ public class Events {
                     LabyMod.getInstance().getServerManager().getPermissionMap().forEach((permission, enabled) -> {
                         if(permission.isDefaultEnabled() && !enabled) {
                             LabyMod.getInstance().getServerManager().getPermissionMap().remove(permission);
-                            NeoEssentials.getNeoEssentials().getApi().displayMessageInChat(NeoEssentials.PREFIX+"§aBypassed permission "+permission.getDisplayName()+".");
+                            NeoEssentials.getNeoEssentials().getApi().displayMessageInChat(NeoEssentials.PREFIX+"§aBypassed server permission §e"+permission.getDisplayName()+"§a.");
                         }
                     });
                 }

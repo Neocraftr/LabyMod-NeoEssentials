@@ -1,4 +1,4 @@
-package me.dominic.neoessentials.utils;
+package me.dominic.neoessentials.custom;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
