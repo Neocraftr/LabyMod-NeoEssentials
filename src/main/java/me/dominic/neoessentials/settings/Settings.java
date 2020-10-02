@@ -22,6 +22,7 @@ public class Settings {
     private int autoUseKey = Keyboard.KEY_U;
     private int ungrabMouseKey = Keyboard.KEY_F12;
     private boolean bypassServerPermissions = false;
+    private boolean hideAddons = false;
     private boolean antiAfkKick = false;
 
     public void loadSettings() {
@@ -49,6 +50,9 @@ public class Settings {
 
         if(getConfig().has("bypassServerPermissons"))
             setBypassServerPermissions(getConfig().get("bypassServerPermissons").getAsBoolean());
+
+        if(getConfig().has("hideAddons"))
+            setHideAddons(getConfig().get("hideAddons").getAsBoolean());
 
         if(getConfig().has("antiAfkKick"))
             setAntiAfkKick(getConfig().get("antiAfkKick").getAsBoolean());
@@ -113,6 +117,17 @@ public class Settings {
         }, isBypassServerPermissions());
         settings.add(bypassServerPermissionsBtn);
 
+        final BooleanElement hideAddonsBtn = new BooleanElement("Hide installed addons",
+                new ControlElement.IconData(Material.BARRIER), new Consumer<Boolean>() {
+            @Override
+            public void accept(Boolean hideAddons) {
+                setHideAddons(hideAddons);
+                getConfig().addProperty("hideAddons", hideAddons);
+                saveConfig();
+            }
+        }, isHideAddons());
+        settings.add(hideAddonsBtn);
+
         settings.add(new HeaderElement("GrieferGames"));
 
         final BooleanElement antiAfkKickBtn = new BooleanElement("Anti AFK kick",
@@ -175,6 +190,13 @@ public class Settings {
     }
     public boolean isBypassServerPermissions() {
         return bypassServerPermissions;
+    }
+
+    public void setHideAddons(boolean hideAddons) {
+        this.hideAddons = hideAddons;
+    }
+    public boolean isHideAddons() {
+        return hideAddons;
     }
 
     public void setAntiAfkKick(boolean antiAfkKick) {

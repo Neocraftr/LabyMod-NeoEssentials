@@ -4,6 +4,7 @@ import me.dominic.neoessentials.listener.*;
 import me.dominic.neoessentials.reflect.Reflect;
 import me.dominic.neoessentials.settings.Settings;
 import me.dominic.neoessentials.utils.CustomIngameChatManager;
+import me.dominic.neoessentials.utils.CustomLabyModAPI;
 import me.dominic.neoessentials.utils.Helper;
 import net.labymod.api.LabyModAddon;
 import net.labymod.main.LabyMod;
@@ -30,6 +31,7 @@ public class NeoEssentials extends LabyModAddon {
     @Override
     public void onEnable() {
         Reflect.getField(LabyMod.class, "IngameChatManager").set(LabyMod.getInstance(), new CustomIngameChatManager());
+        Reflect.getField(LabyMod.class, "labyModAPI").set(LabyMod.getInstance(), new CustomLabyModAPI(LabyMod.getInstance()));
 
         setNeoEssentials(this);
         setCurrentDate(new SimpleDateFormat("dd-MM-yyyy").format(new Date()));
