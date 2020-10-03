@@ -7,12 +7,14 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:2.1-SNAPSHOT'
+        classpath "net.minecraftforge.gradle:ForgeGradle:2.1-SNAPSHOT"
         classpath "com.github.jengelman.gradle.plugins:shadow:4.0.4"
+        classpath "de.undercouch:gradle-download-task:4.1.1"
     }
 }
-apply plugin: 'net.minecraftforge.gradle.forge'
+apply plugin: "net.minecraftforge.gradle.forge"
 apply plugin: "com.github.johnrengelman.shadow"
+apply plugin: "de.undercouch.download"
 
 version = "1.0"
 group= "me.dominic.neoessentials"
@@ -30,7 +32,22 @@ configurations {
 }
 
 dependencies {
-    shade 'org.mariuszgromada.math:MathParser.org-mXparser:4.0.0'
+    shade "org.mariuszgromada.math:MathParser.org-mXparser:4.0.0"
+    compile files("${rootDir.getAbsolutePath()}/libs/lm_api_mc1.8.9.jar")
+}
+
+task updateLabymodApi() {
+    final out = file("${rootDir.getAbsolutePath()}/libs/lm_api_mc1.8.9.jar")
+    outputs.file(out)
+    outputs.upToDateWhen {false}
+
+    doLast {
+        download {
+            src "http://dl.labymod.net/latest/api/files/lm_api_mc1.8.9.jar"
+            dest out
+            onlyIfModified true
+        }
+    }
 }
 
 jar {
@@ -48,6 +65,7 @@ reobf {
 }
 
 compileJava {
+    dependsOn updateLabymodApi
     sourceCompatibility = '1.8'
     targetCompatibility = '1.8'
 }
