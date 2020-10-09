@@ -28,34 +28,34 @@ public class Settings {
     public void loadSettings() {
         if(!getConfig().has("autoColorIgnoreMessages"))
             getConfig().add("autoColorIgnoreMessages", new Gson().toJsonTree(Collections.emptyList()));
-        setAutoColorIgnoreMessages(new Gson().fromJson(getConfig().get("autoColorIgnoreMessages"), ArrayList.class));
+        autoColorIgnoreMessages = new Gson().fromJson(getConfig().get("autoColorIgnoreMessages"), ArrayList.class);
         saveConfig();
 
         if(getConfig().has("autoColor")) {
             for(EnumAutoColor color : EnumAutoColor.values()) {
                 if(color.name().equalsIgnoreCase(getConfig().get("autoColor").getAsString())) {
-                    setAutoColor(color);
+                    autoColor = color;
                 }
             }
         }
 
         if(getConfig().has("autoBreakKey"))
-            setAutoBreakKey(getConfig().get("autoBreakKey").getAsInt());
+            autoBreakKey = getConfig().get("autoBreakKey").getAsInt();
 
         if(getConfig().has("autoUseKey"))
-            setAutoUseKey(getConfig().get("autoUseKey").getAsInt());
+            autoUseKey = getConfig().get("autoUseKey").getAsInt();
 
         if(getConfig().has("ungrabMouseKey"))
-            setUngrabMouseKey(getConfig().get("ungrabMouseKey").getAsInt());
+            ungrabMouseKey = getConfig().get("ungrabMouseKey").getAsInt();
 
         if(getConfig().has("bypassServerPermissons"))
-            setBypassServerPermissions(getConfig().get("bypassServerPermissons").getAsBoolean());
+            bypassServerPermissions = getConfig().get("bypassServerPermissons").getAsBoolean();
 
         if(getConfig().has("hideAddons"))
-            setHideAddons(getConfig().get("hideAddons").getAsBoolean());
+            hideAddons = getConfig().get("hideAddons").getAsBoolean();
 
         if(getConfig().has("antiAfkKick"))
-            setAntiAfkKick(getConfig().get("antiAfkKick").getAsBoolean());
+            antiAfkKick = getConfig().get("antiAfkKick").getAsBoolean();
     }
 
     public void fillSettings(List<SettingsElement> settings) {
@@ -65,8 +65,8 @@ public class Settings {
         autoColorDropdownMenu.setSelected(autoColor);
         autoColorDropdown.setChangeListener(new Consumer<EnumAutoColor>() {
             @Override
-            public void accept(EnumAutoColor autoColor) {
-                setAutoColor(autoColor);
+            public void accept(EnumAutoColor color) {
+                autoColor = color;
                 getConfig().addProperty("autoColor", autoColor.name());
                 saveConfig();
             }
@@ -74,10 +74,10 @@ public class Settings {
         settings.add(autoColorDropdown);
 
         final KeyElement autoBreakKeyOption = new KeyElement("Auto break",
-                new ControlElement.IconData(Material.DIAMOND_PICKAXE), getAutoBreakKey(), new Consumer<Integer>() {
+                new ControlElement.IconData(Material.DIAMOND_PICKAXE), autoBreakKey, new Consumer<Integer>() {
             @Override
             public void accept(Integer key) {
-                setAutoBreakKey(key);
+                autoBreakKey = key;
                 getConfig().addProperty("autoBreakKey", key);
                 saveConfig();
             }
@@ -85,10 +85,10 @@ public class Settings {
         settings.add(autoBreakKeyOption);
 
         final KeyElement autoUseKeyOption = new KeyElement("Auto use",
-                new ControlElement.IconData(Material.SHEARS), getAutoUseKey(), new Consumer<Integer>() {
+                new ControlElement.IconData(Material.SHEARS), autoUseKey, new Consumer<Integer>() {
             @Override
             public void accept(Integer key) {
-                setAutoUseKey(key);
+                autoUseKey = key;
                 getConfig().addProperty("autoUseKey", key);
                 saveConfig();
             }
@@ -96,10 +96,10 @@ public class Settings {
         settings.add(autoUseKeyOption);
 
         final KeyElement ungrabMouseKeyOption = new KeyElement("Ungrab mouse",
-                new ControlElement.IconData("labymod/textures/settings/modules/clicktest.png"), getUngrabMouseKey(), new Consumer<Integer>() {
+                new ControlElement.IconData("labymod/textures/settings/modules/clicktest.png"), ungrabMouseKey, new Consumer<Integer>() {
             @Override
             public void accept(Integer key) {
-                setUngrabMouseKey(key);
+                ungrabMouseKey = key;
                 getConfig().addProperty("ungrabMouseKey", key);
                 saveConfig();
             }
@@ -109,23 +109,23 @@ public class Settings {
         final BooleanElement bypassServerPermissionsBtn = new BooleanElement("Bypass server permissions",
                 new ControlElement.IconData(Material.COMMAND), new Consumer<Boolean>() {
             @Override
-            public void accept(Boolean bypassPermissions) {
-                setBypassServerPermissions(bypassPermissions);
-                getConfig().addProperty("bypassServerPermissons", bypassPermissions);
+            public void accept(Boolean enabled) {
+                bypassServerPermissions = enabled;
+                getConfig().addProperty("bypassServerPermissons", enabled);
                 saveConfig();
             }
-        }, isBypassServerPermissions());
+        }, bypassServerPermissions);
         settings.add(bypassServerPermissionsBtn);
 
         final BooleanElement hideAddonsBtn = new BooleanElement("Hide installed addons",
                 new ControlElement.IconData(Material.BARRIER), new Consumer<Boolean>() {
             @Override
-            public void accept(Boolean hideAddons) {
-                setHideAddons(hideAddons);
-                getConfig().addProperty("hideAddons", hideAddons);
+            public void accept(Boolean enabled) {
+                hideAddons = enabled;
+                getConfig().addProperty("hideAddons", enabled);
                 saveConfig();
             }
-        }, isHideAddons());
+        }, hideAddons);
         settings.add(hideAddonsBtn);
 
         settings.add(new HeaderElement("GrieferGames"));
@@ -133,12 +133,12 @@ public class Settings {
         final BooleanElement antiAfkKickBtn = new BooleanElement("Anti AFK kick",
                 new ControlElement.IconData(Material.EMERALD), new Consumer<Boolean>() {
             @Override
-            public void accept(Boolean antiAfkKick) {
-                setAntiAfkKick(antiAfkKick);
-                getConfig().addProperty("antiAfkKick", antiAfkKick);
+            public void accept(Boolean enabled) {
+                antiAfkKick = enabled;
+                getConfig().addProperty("antiAfkKick", enabled);
                 saveConfig();
             }
-        }, isAntiAfkKick());
+        }, antiAfkKick);
         settings.add(antiAfkKickBtn);
     }
 
@@ -150,58 +150,34 @@ public class Settings {
         NeoEssentials.getNeoEssentials().saveConfig();
     }
 
-    public void setAutoColorIgnoreMessages(ArrayList<String> autoColorIgnoreMessages) {
-        this.autoColorIgnoreMessages = autoColorIgnoreMessages;
-    }
     public ArrayList<String> getAutoColorIgnoreMessages() {
         return autoColorIgnoreMessages;
     }
 
-    public void setAutoColor(EnumAutoColor autoColor) {
-        this.autoColor = autoColor;
-    }
     public EnumAutoColor getAutoColor() {
         return autoColor;
     }
 
-    public void setAutoBreakKey(int autoBreakKey) {
-        this.autoBreakKey = autoBreakKey;
-    }
     public int getAutoBreakKey() {
         return autoBreakKey;
     }
 
-    public void setAutoUseKey(int autoUseKey) {
-        this.autoUseKey = autoUseKey;
-    }
     public int getAutoUseKey() {
         return autoUseKey;
     }
 
-    public void setUngrabMouseKey(int ungrabMouseKey) {
-        this.ungrabMouseKey = ungrabMouseKey;
-    }
     public int getUngrabMouseKey() {
         return ungrabMouseKey;
     }
 
-    public void setBypassServerPermissions(boolean bypassServerPermissions) {
-        this.bypassServerPermissions = bypassServerPermissions;
-    }
     public boolean isBypassServerPermissions() {
         return bypassServerPermissions;
     }
 
-    public void setHideAddons(boolean hideAddons) {
-        this.hideAddons = hideAddons;
-    }
     public boolean isHideAddons() {
         return hideAddons;
     }
 
-    public void setAntiAfkKick(boolean antiAfkKick) {
-        this.antiAfkKick = antiAfkKick;
-    }
     public boolean isAntiAfkKick() {
         return antiAfkKick;
     }
