@@ -17,7 +17,9 @@ public class ChatReceiveListener implements MessageReceiveEvent {
 
     @Override
     public boolean onReceive(String msgRaw, String msg) {
-        getNeoEssentials().getHelper().logChatMessage(msg);
+        if(getSettings().isLogChat()) {
+            getNeoEssentials().getHelper().logChatMessage(msg);
+        }
 
         getHelper().getLastFormatedChatMessages().add(msgRaw);
         while(getHelper().getLastFormatedChatMessages().size() > 60) {

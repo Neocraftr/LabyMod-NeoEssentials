@@ -18,7 +18,6 @@ public class CustomLabyModAPI extends LabyModAPI {
 
     @Override
     public void sendJsonMessageToServer(String messageKey, JsonElement message) {
-        System.out.println(message.toString());
         JsonObject messageObj = message.getAsJsonObject();
         if(getSettings().isHideAddons() &&
                 messageObj.get("version") != null &&

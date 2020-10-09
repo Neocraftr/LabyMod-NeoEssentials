@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import me.dominic.neoessentials.NeoEssentials;
 import me.dominic.neoessentials.enums.EnumAutoColor;
+import me.dominic.neoessentials.utils.Helper;
 import net.labymod.gui.elements.DropDownMenu;
 import net.labymod.settings.elements.*;
 import net.labymod.utils.Consumer;
@@ -21,12 +22,14 @@ public class Settings {
     private int autoBreakKey = Keyboard.KEY_B;
     private int autoUseKey = Keyboard.KEY_U;
     private int ungrabMouseKey = Keyboard.KEY_F12;
+    private boolean logChat = true;
     private boolean bypassServerPermissions = false;
     private boolean hideAddons = false;
     private boolean antiAfkKick = false;
     private boolean pauseOnItemRemover = false;
 
     public void loadSettings() {
+        // TODO: Add graphical settings
         if(!getConfig().has("autoColorIgnoreMessages"))
             getConfig().add("autoColorIgnoreMessages", new Gson().toJsonTree(Collections.emptyList()));
         autoColorIgnoreMessages = new Gson().fromJson(getConfig().get("autoColorIgnoreMessages"), ArrayList.class);
@@ -49,6 +52,9 @@ public class Settings {
         if(getConfig().has("ungrabMouseKey"))
             ungrabMouseKey = getConfig().get("ungrabMouseKey").getAsInt();
 
+        if(getConfig().has("logChat"))
+            logChat = getConfig().get("logChat").getAsBoolean();
+
         if(getConfig().has("bypassServerPermissons"))
             bypassServerPermissions = getConfig().get("bypassServerPermissons").getAsBoolean();
 
@@ -60,6 +66,8 @@ public class Settings {
 
         if(getConfig().has("pauseOnItemRemover"))
             pauseOnItemRemover = getConfig().get("pauseOnItemRemover").getAsBoolean();
+
+        if(logChat) getHelper().initChatLog();
     }
 
     public void fillSettings(List<SettingsElement> settings) {
@@ -110,6 +118,18 @@ public class Settings {
         });
         settings.add(ungrabMouseKeyOption);
 
+        final BooleanElement logChatBtn = new BooleanElement("Log chat",
+                new ControlElement.IconData("labymod/textures/settings/settings/second_chat.png"), new Consumer<Boolean>() {
+            @Override
+            public void accept(Boolean enabled) {
+                logChat = enabled;
+                if(enabled) getHelper().initChatLog();
+                getConfig().addProperty("logChat", enabled);
+                saveConfig();
+            }
+        }, logChat);
+        settings.add(logChatBtn);
+
         final BooleanElement bypassServerPermissionsBtn = new BooleanElement("Bypass server permissions",
                 new ControlElement.IconData(Material.COMMAND), new Consumer<Boolean>() {
             @Override
@@ -157,6 +177,10 @@ public class Settings {
         settings.add(pauseOnItemRemoverBtn);
     }
 
+    private Helper getHelper() {
+        return NeoEssentials.getNeoEssentials().getHelper();
+    }
+
     private JsonObject getConfig() {
         return NeoEssentials.getNeoEssentials().getConfig();
     }
@@ -199,5 +223,9 @@ public class Settings {
 
     public boolean isPauseOnItemRemover() {
         return pauseOnItemRemover;
+    }
+
+    public boolean isLogChat() {
+        return logChat;
     }
 }

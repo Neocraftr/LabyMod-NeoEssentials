@@ -6,6 +6,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.stream.JsonReader;
 import me.dominic.neoessentials.NeoEssentials;
+import me.dominic.neoessentials.settings.Settings;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.MouseHelper;
 import org.lwjgl.input.Mouse;
@@ -36,17 +37,17 @@ public class Helper {
 
         setChatLogDir(new File(getAddonDir()+"/chatlog"));
         if(!getChatLogDir().exists()) getChatLogDir().mkdir();
+    }
 
-        setChatLogFile(new File(getChatLogDir()+"/"+getNeoEssentials().getCurrentDate()+".txt"));
-        if(!getChatLogFile().exists()) {
-            try {
-                getChatLogFile().createNewFile();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+    public void initChatLog() {
+        if(getChatLogWriter() != null) return;
 
         try {
+            setChatLogFile(new File(getChatLogDir()+"/"+getNeoEssentials().getCurrentDate()+".txt"));
+            if(!getChatLogFile().exists()) {
+                getChatLogFile().createNewFile();
+            }
+
             setChatLogWriter(new BufferedWriter(new FileWriter(getChatLogFile(), true)));
         } catch (IOException e) {
             e.printStackTrace();
@@ -54,6 +55,7 @@ public class Helper {
     }
 
     public void logChatMessage(String msg) {
+        if(getChatLogWriter() == null) return;
         final String time = new SimpleDateFormat("mm:HH:ss").format(new Date());
         try {
             getChatLogWriter().append("["+time+"] "+msg+"\n");
