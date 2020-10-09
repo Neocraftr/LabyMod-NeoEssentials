@@ -27,11 +27,13 @@ public class Events {
     @SubscribeEvent
     public void onKeyInput(InputEvent.KeyInputEvent e) {
         if(getSettings().getAutoBreakKey() != -1 && Keyboard.isKeyDown(getSettings().getAutoBreakKey())) {
-            boolean state = !getMC().gameSettings.keyBindAttack.isKeyDown();
+            boolean state = !getHelper().isAutoBreakActive();
+            getHelper().setAutoBreakActive(state);
             KeyBinding.setKeyBindState(getMC().gameSettings.keyBindAttack.getKeyCode(), state);
         }
         if(getSettings().getAutoUseKey() != -1 && Keyboard.isKeyDown(getSettings().getAutoUseKey())) {
-            boolean state = !getMC().gameSettings.keyBindUseItem.isKeyDown();
+            boolean state = !getHelper().isAutoUseActive();
+            getHelper().setAutoUseActive(state);
             KeyBinding.setKeyBindState(getMC().gameSettings.keyBindUseItem.getKeyCode(), state);
         }
         if(getSettings().getUngrabMouseKey() != -1 && Keyboard.isKeyDown(getSettings().getUngrabMouseKey())) {
@@ -47,6 +49,7 @@ public class Events {
     public void onTick(TickEvent.PlayerTickEvent e) {
         if(e.phase == TickEvent.Phase.START) {
             Schedule.updateSchedules();
+
             if(getSettings().isAntiAfkKick()) {
                 EntityPlayerSP player = Minecraft.getMinecraft().thePlayer;
                 Container cont = player.openContainer;
@@ -67,6 +70,16 @@ public class Events {
                 } else {
                     afkMenuOpen = false;
                 }
+            }
+
+            if(getHelper().isAutoBreakActive() && !(getMC().gameSettings.keyBindAttack.isKeyDown()
+                    || (getSettings().isPauseOnItemRemover() && getHelper().isItemRemoverActive()))) {
+                getHelper().setAutoBreakActive(false);
+            }
+
+            if(getHelper().isAutoUseActive() && !(getMC().gameSettings.keyBindUseItem.isKeyDown()
+                    || (getSettings().isPauseOnItemRemover() && getHelper().isItemRemoverActive()))) {
+                getHelper().setAutoUseActive(false);
             }
         }
     }

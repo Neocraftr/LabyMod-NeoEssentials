@@ -26,6 +26,9 @@ public class Helper {
     private boolean originalFocusPauseSetting;
     private MouseHelper oldMouseHelper;
     private ArrayList<String> lastFormatedChatMessages = new ArrayList<>();
+    private boolean itemRemoverActive = false;
+    private boolean autoBreakActive = false;
+    private boolean autoUseActive = false;
 
     public Helper() {
         setAddonDir(new File("neoessentials"));
@@ -244,5 +247,26 @@ public class Helper {
 
     public ArrayList<String> getLastFormatedChatMessages() {
         return lastFormatedChatMessages;
+    }
+
+    public void setItemRemoverActive(boolean itemRemoverActive) {
+        this.itemRemoverActive = itemRemoverActive;
+    }
+    public boolean isItemRemoverActive() {
+        return itemRemoverActive;
+    }
+
+    public void setAutoUseActive(boolean autoUseActive) {
+        this.autoUseActive = autoUseActive;
+    }
+    public boolean isAutoUseActive() {
+        return autoUseActive;
+    }
+
+    public void setAutoBreakActive(boolean autoBreakActive) {
+        this.autoBreakActive = autoBreakActive;
+    }
+    public boolean isAutoBreakActive() {
+        return autoBreakActive;
     }
 }

@@ -24,6 +24,7 @@ public class Settings {
     private boolean bypassServerPermissions = false;
     private boolean hideAddons = false;
     private boolean antiAfkKick = false;
+    private boolean pauseOnItemRemover = false;
 
     public void loadSettings() {
         if(!getConfig().has("autoColorIgnoreMessages"))
@@ -56,6 +57,9 @@ public class Settings {
 
         if(getConfig().has("antiAfkKick"))
             antiAfkKick = getConfig().get("antiAfkKick").getAsBoolean();
+
+        if(getConfig().has("pauseOnItemRemover"))
+            pauseOnItemRemover = getConfig().get("pauseOnItemRemover").getAsBoolean();
     }
 
     public void fillSettings(List<SettingsElement> settings) {
@@ -140,6 +144,17 @@ public class Settings {
             }
         }, antiAfkKick);
         settings.add(antiAfkKickBtn);
+
+        final BooleanElement pauseOnItemRemoverBtn = new BooleanElement("Pause use/break while ItemRemover",
+                new ControlElement.IconData(Material.WATCH), new Consumer<Boolean>() {
+            @Override
+            public void accept(Boolean enabled) {
+                pauseOnItemRemover = enabled;
+                getConfig().addProperty("pauseOnItemRemover", enabled);
+                saveConfig();
+            }
+        }, pauseOnItemRemover);
+        settings.add(pauseOnItemRemoverBtn);
     }
 
     private JsonObject getConfig() {
@@ -180,5 +195,9 @@ public class Settings {
 
     public boolean isAntiAfkKick() {
         return antiAfkKick;
+    }
+
+    public boolean isPauseOnItemRemover() {
+        return pauseOnItemRemover;
     }
 }
