@@ -7,6 +7,7 @@ import me.dominic.neoessentials.custom.CustomIngameChatManager;
 import me.dominic.neoessentials.custom.CustomLabyModAPI;
 import me.dominic.neoessentials.utils.Helper;
 import net.labymod.api.LabyModAddon;
+import net.labymod.ingamechat.IngameChatManager;
 import net.labymod.main.LabyMod;
 import net.labymod.settings.elements.SettingsElement;
 
@@ -30,7 +31,7 @@ public class NeoEssentials extends LabyModAddon {
 
     @Override
     public void onEnable() {
-        Reflect.getField(LabyMod.class, "IngameChatManager").set(LabyMod.getInstance(), new CustomIngameChatManager());
+        Reflect.getField(IngameChatManager.class, "INSTANCE").setStatic(new CustomIngameChatManager());
         Reflect.getField(LabyMod.class, "labyModAPI").set(LabyMod.getInstance(), new CustomLabyModAPI(LabyMod.getInstance()));
 
         setNeoEssentials(this);
