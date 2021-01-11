@@ -1,7 +1,6 @@
 package me.dominic.neoessentials;
 
 import me.dominic.neoessentials.listener.*;
-import me.dominic.neoessentials.reflect.Reflect;
 import me.dominic.neoessentials.settings.Settings;
 import me.dominic.neoessentials.custom.CustomIngameChatManager;
 import me.dominic.neoessentials.custom.CustomLabyModAPI;
@@ -11,6 +10,8 @@ import net.labymod.ingamechat.IngameChatManager;
 import net.labymod.main.LabyMod;
 import net.labymod.settings.elements.SettingsElement;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashSet;
@@ -31,8 +32,19 @@ public class NeoEssentials extends LabyModAddon {
 
     @Override
     public void onEnable() {
-        Reflect.getField(IngameChatManager.class, "INSTANCE").setStatic(new CustomIngameChatManager());
-        Reflect.getField(LabyMod.class, "labyModAPI").set(LabyMod.getInstance(), new CustomLabyModAPI(LabyMod.getInstance()));
+        try {
+            Field ingameChatManagerField = IngameChatManager.class.getDeclaredField("INSTANCE");
+            Field ingameChatManagerModifiers = Field.class.getDeclaredField("modifiers");
+            ingameChatManagerModifiers.setAccessible(true);
+            ingameChatManagerModifiers.setInt(ingameChatManagerField, ingameChatManagerField.getModifiers() & ~Modifier.FINAL);
+            ingameChatManagerField.set(null, new CustomIngameChatManager());
+
+            Field labyModApiField = LabyMod.class.getDeclaredField("labyModAPI");
+            labyModApiField.setAccessible(true);
+            labyModApiField.set(LabyMod.getInstance(), new CustomLabyModAPI(LabyMod.getInstance()));
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
 
         setNeoEssentials(this);
         setCurrentDate(new SimpleDateFormat("dd-MM-yyyy").format(new Date()));
