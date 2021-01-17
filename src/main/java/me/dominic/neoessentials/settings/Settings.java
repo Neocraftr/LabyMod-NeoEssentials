@@ -17,6 +17,8 @@ import java.util.List;
 
 public class Settings {
 
+    private TextElement infoText;
+
     private ArrayList<String> autoColorIgnoreMessages = new ArrayList<>();
     private EnumAutoColor autoColor = EnumAutoColor.DEFAULT;
     private int autoBreakKey = Keyboard.KEY_B;
@@ -27,6 +29,7 @@ public class Settings {
     private boolean hideAddons = false;
     private boolean antiAfkKick = false;
     private boolean pauseOnItemRemover = false;
+    private boolean autoUpdateAddon = true;
 
     public void loadSettings() {
         // TODO: Add graphical settings
@@ -67,10 +70,22 @@ public class Settings {
         if(getConfig().has("pauseOnItemRemover"))
             pauseOnItemRemover = getConfig().get("pauseOnItemRemover").getAsBoolean();
 
+        if(getConfig().has("autoUpdateAddon")) {
+            autoUpdateAddon = getConfig().get("autoUpdateAddon").getAsBoolean();
+        }
+
         if(logChat) getHelper().initChatLog();
     }
 
     public void fillSettings(List<SettingsElement> settings) {
+        final BooleanElement autoUpdateAddonBtn = new BooleanElement("Addon beim start aktualisieren", new ControlElement.IconData("labymod/textures/settings/settings/serverlistliveview.png"), enabled -> {
+            autoUpdateAddon = enabled;
+            updateInfoText();
+            getConfig().addProperty("autoUpdateAddon", enabled);
+            saveConfig();
+        }, autoUpdateAddon);
+        settings.add(autoUpdateAddonBtn);
+
         final DropDownMenu<EnumAutoColor> autoColorDropdownMenu = new DropDownMenu<EnumAutoColor>("Auto chat color", 0, 0, 0, 0)
                 .fill(EnumAutoColor.values());
         final DropDownElement<EnumAutoColor> autoColorDropdown = new DropDownElement<EnumAutoColor>("Auto chat color", autoColorDropdownMenu);
@@ -175,6 +190,10 @@ public class Settings {
             }
         }, pauseOnItemRemover);
         settings.add(pauseOnItemRemoverBtn);
+
+        infoText = new TextElement("");
+        updateInfoText();
+        settings.add(infoText);
     }
 
     private Helper getHelper() {
@@ -187,6 +206,17 @@ public class Settings {
 
     private void saveConfig() {
         NeoEssentials.getNeoEssentials().saveConfig();
+    }
+
+    private void updateInfoText() {
+        String text = "§7GitHub: §ahttps://github.com/Neocraftr/LabyMod-NeoEssentials/\n";
+        text += "§7Version: §a"+ NeoEssentials.VERSION;
+        if(NeoEssentials.getNeoEssentials().getUpdater().isUpdatePending()) {
+            text += " §c(Update ausstehend. Neustart erforderlich)";
+        } else if(NeoEssentials.getNeoEssentials().getUpdater().isUpdateAvailable()) {
+            text += " §c(Update verfügbar)";
+        }
+        infoText.setText(text);
     }
 
     public ArrayList<String> getAutoColorIgnoreMessages() {
@@ -227,5 +257,9 @@ public class Settings {
 
     public boolean isLogChat() {
         return logChat;
+    }
+
+    public boolean isAutoUpdateAddon() {
+        return autoUpdateAddon;
     }
 }
