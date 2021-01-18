@@ -25,7 +25,7 @@ public class NeoEssentials extends LabyModAddon {
 
     public static final String PREFIX = "§8[§2NeoEssentials§8] §7",
                                COMMAND_PREFIX = ".",
-                               VERSION = "0.0.0";
+                               VERSION = "1.0.0";
     
     private static NeoEssentials neoEssentials;
     private Helper helper;
