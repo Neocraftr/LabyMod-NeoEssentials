@@ -11,6 +11,8 @@ import net.labymod.utils.Consumer;
 import net.labymod.utils.Material;
 import org.lwjgl.input.Keyboard;
 
+import java.awt.*;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -144,6 +146,19 @@ public class Settings {
             }
         }, logChat);
         settings.add(logChatBtn);
+
+        final ButtonElement openLogDirBtn = new ButtonElement("Chat log folder", "Open",
+                new ControlElement.IconData("labymod/textures/settings/settings/second_chat.png"), new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Desktop.getDesktop().open(getHelper().getChatLogDir());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        settings.add(openLogDirBtn);
 
         final BooleanElement bypassServerPermissionsBtn = new BooleanElement("Bypass server permissions",
                 new ControlElement.IconData(Material.COMMAND), new Consumer<Boolean>() {
