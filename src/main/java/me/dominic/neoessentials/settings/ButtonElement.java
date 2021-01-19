@@ -20,27 +20,12 @@ public class ButtonElement extends ControlElement {
     }
 
     @Override
-    public void drawDescription(int x, int y, int screenWidth) {}
-
-    @Override
     public void mouseClicked(int mouseX, int mouseY, int mouseButton) {
         if(button.enabled && button.isMouseOver()) {
             button.playPressSound(mc.getSoundHandler());
             if(callback != null) callback.run();
         }
     }
-
-    @Override
-    public void mouseRelease(int mouseX, int mouseY, int mouseButton) {}
-
-    @Override
-    public void mouseClickMove(int mouseX, int mouseY, int mouseButton) {}
-
-    @Override
-    public void keyTyped(char typedChar, int keyCode) {}
-
-    @Override
-    public void unfocus(int mouseX, int mouseY, int mouseButton) {}
 
     @Override
     public int getEntryHeight() {

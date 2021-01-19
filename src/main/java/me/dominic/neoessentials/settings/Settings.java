@@ -80,17 +80,18 @@ public class Settings {
     }
 
     public void fillSettings(List<SettingsElement> settings) {
-        final BooleanElement autoUpdateAddonBtn = new BooleanElement("Addon beim start aktualisieren", new ControlElement.IconData("labymod/textures/settings/settings/serverlistliveview.png"), enabled -> {
+        final BooleanElement autoUpdateAddonBtn = new BooleanElement("Addon aktualisieren", new ControlElement.IconData("labymod/textures/settings/settings/serverlistliveview.png"), enabled -> {
             autoUpdateAddon = enabled;
             updateInfoText();
             getConfig().addProperty("autoUpdateAddon", enabled);
             saveConfig();
         }, autoUpdateAddon);
+        autoUpdateAddonBtn.setDescriptionText("Addon beim beenden automatisch aktualisieren");
         settings.add(autoUpdateAddonBtn);
 
-        final DropDownMenu<EnumAutoColor> autoColorDropdownMenu = new DropDownMenu<EnumAutoColor>("Auto chat color", 0, 0, 0, 0)
+        final DropDownMenu<EnumAutoColor> autoColorDropdownMenu = new DropDownMenu<EnumAutoColor>("Chat Farbe", 0, 0, 0, 0)
                 .fill(EnumAutoColor.values());
-        final DropDownElement<EnumAutoColor> autoColorDropdown = new DropDownElement<EnumAutoColor>("Auto chat color", autoColorDropdownMenu);
+        final DropDownElement<EnumAutoColor> autoColorDropdown = new DropDownElement<EnumAutoColor>("Chat Farbe", autoColorDropdownMenu);
         autoColorDropdownMenu.setSelected(autoColor);
         autoColorDropdown.setChangeListener(new Consumer<EnumAutoColor>() {
             @Override
@@ -102,7 +103,7 @@ public class Settings {
         });
         settings.add(autoColorDropdown);
 
-        final KeyElement autoBreakKeyOption = new KeyElement("Auto break",
+        final KeyElement autoBreakKeyOption = new KeyElement("Automatisch Abbauen",
                 new ControlElement.IconData(Material.DIAMOND_PICKAXE), autoBreakKey, new Consumer<Integer>() {
             @Override
             public void accept(Integer key) {
@@ -111,9 +112,10 @@ public class Settings {
                 saveConfig();
             }
         });
+        autoBreakKeyOption.setDescriptionText("Linke Maustaste feststellen");
         settings.add(autoBreakKeyOption);
 
-        final KeyElement autoUseKeyOption = new KeyElement("Auto use",
+        final KeyElement autoUseKeyOption = new KeyElement("Automatisch Interagieren",
                 new ControlElement.IconData(Material.SHEARS), autoUseKey, new Consumer<Integer>() {
             @Override
             public void accept(Integer key) {
@@ -122,9 +124,10 @@ public class Settings {
                 saveConfig();
             }
         });
+        autoUseKeyOption.setDescriptionText("Rechte maustaste feststellen");
         settings.add(autoUseKeyOption);
 
-        final KeyElement ungrabMouseKeyOption = new KeyElement("Ungrab mouse",
+        final KeyElement ungrabMouseKeyOption = new KeyElement("Maus freigeben",
                 new ControlElement.IconData("labymod/textures/settings/modules/clicktest.png"), ungrabMouseKey, new Consumer<Integer>() {
             @Override
             public void accept(Integer key) {
@@ -133,9 +136,10 @@ public class Settings {
                 saveConfig();
             }
         });
+        ungrabMouseKeyOption.setDescriptionText("Mauszeiger freigeben ohne das Spiel zu pausieren");
         settings.add(ungrabMouseKeyOption);
 
-        final BooleanElement logChatBtn = new BooleanElement("Log chat",
+        final BooleanElement logChatBtn = new BooleanElement("Chatverlauf speichern",
                 new ControlElement.IconData("labymod/textures/settings/settings/second_chat.png"), new Consumer<Boolean>() {
             @Override
             public void accept(Boolean enabled) {
@@ -145,9 +149,10 @@ public class Settings {
                 saveConfig();
             }
         }, logChat);
+        logChatBtn.setDescriptionText("Alles Chatnachrichten in Datei speichern");
         settings.add(logChatBtn);
 
-        final ButtonElement openLogDirBtn = new ButtonElement("Chat log folder", "Open",
+        final ButtonElement openLogDirBtn = new ButtonElement("Chatverlauf Ordner", "Öffnen",
                 new ControlElement.IconData("labymod/textures/settings/settings/second_chat.png"), new Runnable() {
             @Override
             public void run() {
@@ -158,9 +163,10 @@ public class Settings {
                 }
             }
         });
+        openLogDirBtn.setDescriptionText("Ordner mit Chatverläufen anzeigen");
         settings.add(openLogDirBtn);
 
-        final BooleanElement bypassServerPermissionsBtn = new BooleanElement("Bypass server permissions",
+        final BooleanElement bypassServerPermissionsBtn = new BooleanElement("Server Rechte umgehen",
                 new ControlElement.IconData(Material.COMMAND), new Consumer<Boolean>() {
             @Override
             public void accept(Boolean enabled) {
@@ -169,9 +175,10 @@ public class Settings {
                 saveConfig();
             }
         }, bypassServerPermissions);
+        bypassServerPermissionsBtn.setDescriptionText("Unterbinden, dass Server bestimmte LabyMod Funktionen deaktivieren können");
         settings.add(bypassServerPermissionsBtn);
 
-        final BooleanElement hideAddonsBtn = new BooleanElement("Hide installed addons",
+        final BooleanElement hideAddonsBtn = new BooleanElement("Installierte Mods verbergen",
                 new ControlElement.IconData(Material.BARRIER), new Consumer<Boolean>() {
             @Override
             public void accept(Boolean enabled) {
@@ -180,11 +187,12 @@ public class Settings {
                 saveConfig();
             }
         }, hideAddons);
+        hideAddonsBtn.setDescriptionText("Installierte Mods/LabyMod Addons nicht an den Server übermitteln");
         settings.add(hideAddonsBtn);
 
         settings.add(new HeaderElement("GrieferGames"));
 
-        final BooleanElement antiAfkKickBtn = new BooleanElement("Anti AFK kick",
+        final BooleanElement antiAfkKickBtn = new BooleanElement("Anti AFK",
                 new ControlElement.IconData(Material.EMERALD), new Consumer<Boolean>() {
             @Override
             public void accept(Boolean enabled) {
@@ -193,9 +201,10 @@ public class Settings {
                 saveConfig();
             }
         }, antiAfkKick);
+        antiAfkKickBtn.setDescriptionText("AFk Menü automatisch bestätigen");
         settings.add(antiAfkKickBtn);
 
-        final BooleanElement pauseOnItemRemoverBtn = new BooleanElement("Pause use/break while ItemRemover",
+        final BooleanElement pauseOnItemRemoverBtn = new BooleanElement("Pause bei ItemRemover",
                 new ControlElement.IconData(Material.WATCH), new Consumer<Boolean>() {
             @Override
             public void accept(Boolean enabled) {
@@ -204,6 +213,7 @@ public class Settings {
                 saveConfig();
             }
         }, pauseOnItemRemover);
+        pauseOnItemRemoverBtn.setDescriptionText("Automatisches Abbauen/Interagieren bei ItemRemover pausieren");
         settings.add(pauseOnItemRemoverBtn);
 
         infoText = new TextElement("");
