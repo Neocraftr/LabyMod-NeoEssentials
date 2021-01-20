@@ -26,6 +26,7 @@ public class Settings {
     private int autoBreakKey = Keyboard.KEY_B;
     private int autoUseKey = Keyboard.KEY_U;
     private int ungrabMouseKey = Keyboard.KEY_F12;
+    private int dropAllKey = Keyboard.KEY_A;
     private boolean logChat = true;
     private boolean bypassServerPermissions = false;
     private boolean hideAddons = false;
@@ -57,6 +58,9 @@ public class Settings {
         if(getConfig().has("ungrabMouseKey"))
             ungrabMouseKey = getConfig().get("ungrabMouseKey").getAsInt();
 
+        if(getConfig().has("dropAllKey"))
+            dropAllKey = getConfig().get("dropAllKey").getAsInt();
+
         if(getConfig().has("logChat"))
             logChat = getConfig().get("logChat").getAsBoolean();
 
@@ -72,9 +76,8 @@ public class Settings {
         if(getConfig().has("pauseOnItemRemover"))
             pauseOnItemRemover = getConfig().get("pauseOnItemRemover").getAsBoolean();
 
-        if(getConfig().has("autoUpdateAddon")) {
+        if(getConfig().has("autoUpdateAddon"))
             autoUpdateAddon = getConfig().get("autoUpdateAddon").getAsBoolean();
-        }
 
         if(logChat) getHelper().initChatLog();
     }
@@ -138,6 +141,18 @@ public class Settings {
         });
         ungrabMouseKeyOption.setDescriptionText("Mauszeiger freigeben ohne das Spiel zu pausieren");
         settings.add(ungrabMouseKeyOption);
+
+        final KeyElement dropAllOptions = new KeyElement("Alle Items droppen",
+                new ControlElement.IconData("labymod/textures/settings/default/item_gravity.png"), dropAllKey, new Consumer<Integer>() {
+            @Override
+            public void accept(Integer key) {
+                dropAllKey = key;
+                getConfig().addProperty("dropAllKey", key);
+                saveConfig();
+            }
+        });
+        dropAllOptions.setDescriptionText("Im Inventar alle Items des gewählten Types droppen (Taste gillt nur im Inventar)");
+        settings.add(dropAllOptions);
 
         final BooleanElement logChatBtn = new BooleanElement("Chatverlauf speichern",
                 new ControlElement.IconData("labymod/textures/settings/settings/second_chat.png"), new Consumer<Boolean>() {
@@ -286,5 +301,9 @@ public class Settings {
 
     public boolean isAutoUpdateAddon() {
         return autoUpdateAddon;
+    }
+
+    public int getDropAllKey() {
+        return dropAllKey;
     }
 }
