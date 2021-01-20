@@ -4,6 +4,7 @@ import me.dominic.neoessentials.settings.Settings;
 import me.dominic.neoessentials.utils.Helper;
 import me.dominic.neoessentials.NeoEssentials;
 import me.dominic.neoessentials.utils.Schedule;
+import net.labymod.core.asm.LabyModCoreMod;
 import net.labymod.main.LabyMod;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -25,6 +26,8 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class Events {
+
+    private final String getSlotMethodName = LabyModCoreMod.isObfuscated() ? "func_146975_c" : "getSlotAtPosition";
 
     private boolean afkMenuOpen;
     private boolean dropAllButtonPressed;
@@ -87,7 +90,7 @@ public class Events {
                             int mouseX = Mouse.getEventX() * guiContainer.width / getMC().displayWidth;
                             int mouseY = guiContainer.height - Mouse.getEventY() * guiContainer.height / getMC().displayHeight - 1;
 
-                            Method getSlotMethod = GuiContainer.class.getDeclaredMethod("getSlotAtPosition", int.class, int.class);
+                            Method getSlotMethod = GuiContainer.class.getDeclaredMethod(getSlotMethodName, int.class, int.class);
                             getSlotMethod.setAccessible(true);
 
                             Slot slot = (Slot) getSlotMethod.invoke(guiContainer, mouseX, mouseY);
