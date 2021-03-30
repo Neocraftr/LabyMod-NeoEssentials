@@ -65,7 +65,7 @@ public class Events {
                     if(!afkMenuOpen) {
                         ContainerChest chest = ((ContainerChest) cont);
                         IInventory inv = chest.getLowerChestInventory();
-                        if(inv.getName().equals("§cAfk?")) {
+                        if(inv.getName().equals("§cAFK?")) {
                             afkMenuOpen = true;
                             new Timer().schedule(new TimerTask() {
                                 @Override
