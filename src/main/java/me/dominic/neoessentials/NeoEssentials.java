@@ -58,6 +58,7 @@ public class NeoEssentials extends LabyModAddon {
 
         getApi().getEventManager().register(new ChatSendListener());
         getApi().getEventManager().register(new ChatReceiveListener());
+        getApi().getEventManager().register(new PluginMessageListener());
         getApi().registerForgeListener(new Events());
         registerEvent(new CommandListener());
     }

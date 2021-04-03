@@ -33,6 +33,7 @@ public class Settings {
     private boolean antiAfkKick = false;
     private boolean pauseOnItemRemover = false;
     private boolean autoUpdateAddon = true;
+    private boolean emulateMysteryMod = true;
 
     public void loadSettings() {
         // TODO: Add graphical settings
@@ -78,6 +79,9 @@ public class Settings {
 
         if(getConfig().has("autoUpdateAddon"))
             autoUpdateAddon = getConfig().get("autoUpdateAddon").getAsBoolean();
+
+        if(getConfig().has("emulateMysteryMod"))
+            emulateMysteryMod = getConfig().get("emulateMysteryMod").getAsBoolean();
 
         if(logChat) getHelper().initChatLog();
     }
@@ -231,6 +235,18 @@ public class Settings {
         pauseOnItemRemoverBtn.setDescriptionText("Automatisches Abbauen/Interagieren bei ItemRemover pausieren");
         settings.add(pauseOnItemRemoverBtn);
 
+        final BooleanElement emulateMysteryModBtn = new BooleanElement("Als MysteryMod ausgeben",
+                new ControlElement.IconData("labymod/textures/settings/settings/particlefix.png"), new Consumer<Boolean>() {
+            @Override
+            public void accept(Boolean enabled) {
+                emulateMysteryMod = enabled;
+                getConfig().addProperty("emulateMysteryMod", enabled);
+                saveConfig();
+            }
+        }, emulateMysteryMod);
+        emulateMysteryModBtn.setDescriptionText("Gibt vor MysteryMod zu verwenden (zusätzliche MoneyDrops)");
+        settings.add(emulateMysteryModBtn);
+
         infoText = new TextElement("");
         updateInfoText();
         settings.add(infoText);
@@ -305,5 +321,9 @@ public class Settings {
 
     public int getDropAllKey() {
         return dropAllKey;
+    }
+
+    public boolean isEmulateMysteryMod() {
+        return emulateMysteryMod;
     }
 }
