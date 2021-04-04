@@ -12,7 +12,9 @@ import net.minecraft.network.PacketBuffer;
 public class PluginMessageListener implements PluginMessageEvent {
 
     @Override
-    public void receiveMessage(String channel, PacketBuffer packetBuffer) {
+    public void receiveMessage(String channel, PacketBuffer packetBufferOrig) {
+        ByteBuf packetBuffer = packetBufferOrig.copy();
+
         if(NeoEssentials.getNeoEssentials().getSettings().isEmulateMysteryMod() && channel.equals("mysterymod:mm")) {
             if(packetBuffer.readableBytes() <= 0) return;
             String messageKey = readStringFromBuffer(32767, packetBuffer);
@@ -36,7 +38,7 @@ public class PluginMessageListener implements PluginMessageEvent {
         Debug.log(Debug.EnumDebugMode.PLUGINMESSAGE, "[OUT] [MYSTERYMOD] " + message);
     }
 
-    private String readStringFromBuffer(int maxLength, PacketBuffer packetBuffer) {
+    private String readStringFromBuffer(int maxLength, ByteBuf packetBuffer) {
         int i = this.readVarIntFromBuffer(packetBuffer);
         if (i > maxLength * 4) {
             throw new DecoderException("The received encoded string buffer length is longer than maximum allowed (" + i + " > " + maxLength * 4 + ")");
@@ -61,7 +63,7 @@ public class PluginMessageListener implements PluginMessageEvent {
         }
     }
 
-    private int readVarIntFromBuffer(PacketBuffer packetBuffer) {
+    private int readVarIntFromBuffer(ByteBuf packetBuffer) {
         int i = 0;
         int j = 0;
 
