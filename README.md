@@ -1,6 +1,8 @@
 # NeoEssentials
 Adds some useful things to LabyMod.
 
+**Download:** https://github.com/Neocraftr/LabyMod-NeoEssentials/releases/latest
+
 ### Features:
 - Automatically write color code before each chat message
 - Key to toggle build / break
