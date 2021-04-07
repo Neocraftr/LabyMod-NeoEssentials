@@ -7,7 +7,10 @@ import me.dominic.neoessentials.custom.CustomLabyModAPI;
 import me.dominic.neoessentials.utils.Helper;
 import me.dominic.neoessentials.utils.Updater;
 import net.labymod.addon.AddonLoader;
+import net.labymod.api.EventManager;
 import net.labymod.api.LabyModAddon;
+import net.labymod.api.events.ServerMessageEvent;
+import net.labymod.api.permissions.PermissionsListener;
 import net.labymod.ingamechat.IngameChatManager;
 import net.labymod.main.LabyMod;
 import net.labymod.settings.elements.SettingsElement;
@@ -15,10 +18,7 @@ import net.labymod.settings.elements.SettingsElement;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 
 public class NeoEssentials extends LabyModAddon {
@@ -33,9 +33,24 @@ public class NeoEssentials extends LabyModAddon {
     private String currentDate;
     private Updater updater;
     private Set<ClientCommandEvent> commandListeners = new HashSet<>();
+    private ServerMessageEvent labyPermissionsListener;
 
     @Override
     public void onEnable() {
+        neoEssentials = this;
+        currentDate = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
+        helper = new Helper();
+        settings = new Settings();
+        updater = new Updater();
+
+        getApi().getEventManager().register(new ChatSendListener());
+        getApi().getEventManager().register(new ChatReceiveListener());
+        getApi().getEventManager().register(new PluginMessageListener());
+        getApi().getEventManager().register(new ServerMessageListener());
+        getApi().registerForgeListener(new Events());
+        registerEvent(new CommandListener());
+
+
         try {
             Field ingameChatManagerField = IngameChatManager.class.getDeclaredField("INSTANCE");
             Field ingameChatManagerModifiers = Field.class.getDeclaredField("modifiers");
@@ -46,21 +61,22 @@ public class NeoEssentials extends LabyModAddon {
             Field labyModApiField = LabyMod.class.getDeclaredField("labyModAPI");
             labyModApiField.setAccessible(true);
             labyModApiField.set(LabyMod.getInstance(), new CustomLabyModAPI(LabyMod.getInstance()));
+
+            Field serverMessageListenerField = EventManager.class.getDeclaredField("serverMessage");
+            serverMessageListenerField.setAccessible(true);
+            Set<ServerMessageEvent> serverMessageListeners = (Set<ServerMessageEvent>) serverMessageListenerField.get(getApi().getEventManager());
+
+            Iterator<ServerMessageEvent> iterator = serverMessageListeners.iterator();
+            while(iterator.hasNext()) {
+                ServerMessageEvent listener = iterator.next();
+                if(listener instanceof PermissionsListener) {
+                    labyPermissionsListener = listener;
+                    iterator.remove();
+                }
+            }
         } catch (NoSuchFieldException | IllegalAccessException e) {
             e.printStackTrace();
         }
-
-        neoEssentials = this;
-        currentDate = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
-        helper = new Helper();
-        settings = new Settings();
-        updater = new Updater();
-
-        getApi().getEventManager().register(new ChatSendListener());
-        getApi().getEventManager().register(new ChatReceiveListener());
-        getApi().getEventManager().register(new PluginMessageListener());
-        getApi().registerForgeListener(new Events());
-        registerEvent(new CommandListener());
     }
 
     @Override
@@ -100,5 +116,9 @@ public class NeoEssentials extends LabyModAddon {
 
     public Set<ClientCommandEvent> getCommandListeners() {
         return commandListeners;
+    }
+
+    public ServerMessageEvent getLabyPermissionsListener() {
+        return labyPermissionsListener;
     }
 }

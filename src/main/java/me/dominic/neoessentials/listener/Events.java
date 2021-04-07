@@ -135,23 +135,6 @@ public class Events {
         }
     }
 
-    @SubscribeEvent
-    public void onJoin(FMLNetworkEvent.ClientConnectedToServerEvent e) {
-        if(getSettings().isBypassServerPermissions()) {
-            new Timer().schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    LabyMod.getInstance().getServerManager().getPermissionMap().forEach((permission, enabled) -> {
-                        if(permission.isDefaultEnabled() && !enabled) {
-                            LabyMod.getInstance().getServerManager().getPermissionMap().remove(permission);
-                            NeoEssentials.getNeoEssentials().getApi().displayMessageInChat(NeoEssentials.PREFIX+"§aBypassed server permission §e"+permission.getDisplayName()+"§a.");
-                        }
-                    });
-                }
-            }, 2000);
-        }
-    }
-
     private Minecraft getMC() {
         return Minecraft.getMinecraft();
     }
