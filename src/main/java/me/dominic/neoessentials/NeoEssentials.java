@@ -14,7 +14,6 @@ import net.labymod.api.permissions.PermissionsListener;
 import net.labymod.ingamechat.IngameChatManager;
 import net.labymod.main.LabyMod;
 import net.labymod.settings.elements.SettingsElement;
-
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.text.SimpleDateFormat;
@@ -47,6 +46,7 @@ public class NeoEssentials extends LabyModAddon {
         getApi().getEventManager().register(new ChatReceiveListener());
         getApi().getEventManager().register(new PluginMessageListener());
         getApi().getEventManager().register(new ServerMessageListener());
+        //getApi().getEventManager().registerOnAddonDevelopmentPacket(new AddonDevelopmentListener());
         getApi().registerForgeListener(new Events());
         registerEvent(new CommandListener());
 
