@@ -2,7 +2,9 @@ buildscript {
     repositories {
         jcenter()
         maven {
-            name = "forge"
+            url = "https://sizableshrimp.me/maven"
+        }
+        maven {
             url = "http://files.minecraftforge.net/maven"
         }
     }
@@ -16,8 +18,10 @@ apply plugin: "net.minecraftforge.gradle.forge"
 apply plugin: "com.github.johnrengelman.shadow"
 apply plugin: "de.undercouch.download"
 
-group= "me.dominic.neoessentials"
+group = "me.dominic.neoessentials"
 archivesBaseName = "NeoEssentials"
+
+compileJava.options.encoding = 'UTF-8'
 
 minecraft {
     version = "1.8.9-11.15.1.1855"
@@ -59,7 +63,7 @@ jar {
 
 reobf {
     jar {
-        useNotchSrg()
+        setMappingType(net.minecraftforge.gradle.user.ReobfMappingType.NOTCH)
     }
 }
 
