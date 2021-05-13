@@ -27,6 +27,7 @@ public class Settings {
     private int autoUseKey = Keyboard.KEY_U;
     private int ungrabMouseKey = Keyboard.KEY_F12;
     private int dropAllKey = Keyboard.KEY_A;
+    private int freecamKey = Keyboard.KEY_V;
     private boolean logChat = true;
     private boolean bypassServerPermissions = false;
     private boolean hideAddons = false;
@@ -61,6 +62,9 @@ public class Settings {
 
         if(getConfig().has("dropAllKey"))
             dropAllKey = getConfig().get("dropAllKey").getAsInt();
+
+        if(getConfig().has("freecamKey"))
+            freecamKey = getConfig().get("freecamKey").getAsInt();
 
         if(getConfig().has("logChat"))
             logChat = getConfig().get("logChat").getAsBoolean();
@@ -157,6 +161,18 @@ public class Settings {
         });
         dropAllOptions.setDescriptionText("Im Inventar alle Items des gewählten Types droppen (Taste gillt nur im Inventar)");
         settings.add(dropAllOptions);
+
+        final KeyElement freecamKeyOption = new KeyElement("Freecam",
+                new ControlElement.IconData("labymod/textures/settings/settings/discordallowspectating.png"), freecamKey, new Consumer<Integer>() {
+            @Override
+            public void accept(Integer key) {
+                freecamKey = key;
+                getConfig().addProperty("freecamKey", key);
+                saveConfig();
+            }
+        });
+        freecamKeyOption.setDescriptionText("Freecam aktivieren / deaktivieren");
+        settings.add(freecamKeyOption);
 
         final BooleanElement logChatBtn = new BooleanElement("Chatverlauf speichern",
                 new ControlElement.IconData("labymod/textures/settings/settings/second_chat.png"), new Consumer<Boolean>() {
@@ -293,6 +309,10 @@ public class Settings {
 
     public int getUngrabMouseKey() {
         return ungrabMouseKey;
+    }
+
+    public int getFreecamKey() {
+        return freecamKey;
     }
 
     public boolean isBypassServerPermissions() {

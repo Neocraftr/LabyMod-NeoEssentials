@@ -6,8 +6,8 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.stream.JsonReader;
 import me.dominic.neoessentials.NeoEssentials;
-import me.dominic.neoessentials.settings.Settings;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityOtherPlayerMP;
 import net.minecraft.util.MouseHelper;
 import org.lwjgl.input.Mouse;
 
@@ -30,6 +30,8 @@ public class Helper {
     private boolean itemRemoverActive = false;
     private boolean autoBreakActive = false;
     private boolean autoUseActive = false;
+    private boolean freecamActive = false;
+    private EntityOtherPlayerMP freecamPlayer;
 
     public Helper() {
         setAddonDir(new File("neoessentials"));
@@ -270,5 +272,20 @@ public class Helper {
     }
     public boolean isAutoBreakActive() {
         return autoBreakActive;
+    }
+
+    public void setFreecamActive(boolean freecamActive) {
+        this.freecamActive = freecamActive;
+    }
+    public boolean isFreecamActive() {
+        return freecamActive;
+    }
+
+    public void setFreecamPlayer(EntityOtherPlayerMP freecamPlayer) {
+        this.freecamPlayer = freecamPlayer;
+    }
+
+    public EntityOtherPlayerMP getFreecamPlayer() {
+        return freecamPlayer;
     }
 }

@@ -5,8 +5,8 @@ import me.dominic.neoessentials.utils.Helper;
 import me.dominic.neoessentials.NeoEssentials;
 import me.dominic.neoessentials.utils.Schedule;
 import net.labymod.core.asm.LabyModCoreMod;
-import net.labymod.main.LabyMod;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityOtherPlayerMP;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.settings.KeyBinding;
@@ -16,7 +16,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
-import net.minecraftforge.fml.common.network.FMLNetworkEvent;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
@@ -51,14 +50,28 @@ public class Events {
                 getHelper().ungrabMouse();
             }
         }
+        if(getSettings().getFreecamKey() != -1 && Keyboard.isKeyDown(getSettings().getFreecamKey())) {
+            if(getHelper().isFreecamActive()) {
+                getHelper().setFreecamActive(false);
+                getMC().setRenderViewEntity(getMC().thePlayer);
+                getMC().theWorld.removeEntity(getHelper().getFreecamPlayer());
+            } else {
+                getHelper().setFreecamActive(true);
+                getHelper().setFreecamPlayer(new EntityOtherPlayerMP(getMC().theWorld, getMC().thePlayer.getGameProfile()));
+                getHelper().getFreecamPlayer().setPositionAndRotation(getMC().thePlayer.posX, getMC().thePlayer.posY, getMC().thePlayer.posZ, getMC().thePlayer.rotationYaw, getMC().thePlayer.rotationPitch);
+                getMC().theWorld.addEntityToWorld(43958, getHelper().getFreecamPlayer());
+                getMC().setRenderViewEntity(getHelper().getFreecamPlayer());
+            }
+        }
     }
 
     @SubscribeEvent
-    public void onTick(TickEvent.PlayerTickEvent e) {
+    public void onTick(TickEvent.ClientTickEvent e) {
         if(e.phase == TickEvent.Phase.END) {
             Schedule.updateSchedules();
 
             EntityPlayerSP player = getMC().thePlayer;
+            if(player == null) return;
             Container cont = player.openContainer;
             if(getSettings().isAntiAfkKick()) {
                 if(cont instanceof ContainerChest) {
@@ -131,6 +144,32 @@ public class Events {
             if(getHelper().isAutoUseActive() && !(getMC().gameSettings.keyBindUseItem.isKeyDown()
                     || (getSettings().isPauseOnItemRemover() && getHelper().isItemRemoverActive()))) {
                 getHelper().setAutoUseActive(false);
+            }
+
+            if(getHelper().isFreecamActive()) {
+                EntityOtherPlayerMP cam = getHelper().getFreecamPlayer();
+                cam.rotationYaw = getMC().thePlayer.rotationYaw;
+                cam.rotationYawHead = getMC().thePlayer.rotationYawHead;
+                cam.rotationPitch = getMC().thePlayer.rotationPitch;
+
+                if(Keyboard.isKeyDown(getMC().gameSettings.keyBindForward.getKeyCode())) {
+                    cam.setPosition(cam.posX + Math.sin(-Math.toRadians(cam.rotationYaw)), cam.posY, cam.posZ + Math.cos(-Math.toRadians(cam.rotationYaw)));
+                }
+                if(Keyboard.isKeyDown(getMC().gameSettings.keyBindBack.getKeyCode())) {
+                    cam.setPosition(cam.posX - Math.sin(-Math.toRadians(cam.rotationYaw)), cam.posY, cam.posZ - Math.cos(-Math.toRadians(cam.rotationYaw)));
+                }
+                if(Keyboard.isKeyDown(getMC().gameSettings.keyBindRight.getKeyCode())) {
+                    cam.setPosition(cam.posX + Math.sin(-Math.toRadians(cam.rotationYaw + 90)), cam.posY, cam.posZ + Math.cos(-Math.toRadians(cam.rotationYaw + 90)));
+                }
+                if(Keyboard.isKeyDown(getMC().gameSettings.keyBindLeft.getKeyCode())) {
+                    cam.setPosition(cam.posX - Math.sin(-Math.toRadians(cam.rotationYaw + 90)), cam.posY, cam.posZ - Math.cos(-Math.toRadians(cam.rotationYaw + 90)));
+                }
+                if(Keyboard.isKeyDown(getMC().gameSettings.keyBindJump.getKeyCode())) {
+                    cam.posY = cam.posY + 1;
+                }
+                if(Keyboard.isKeyDown(getMC().gameSettings.keyBindSneak.getKeyCode())) {
+                    cam.posY = cam.posY - 1;
+                }
             }
         }
     }
