@@ -2,9 +2,6 @@ buildscript {
     repositories {
         jcenter()
         maven {
-            url = "https://sizableshrimp.me/maven"
-        }
-        maven {
             url = "http://files.minecraftforge.net/maven"
         }
     }
@@ -20,8 +17,6 @@ apply plugin: "de.undercouch.download"
 
 group = "me.dominic.neoessentials"
 archivesBaseName = "NeoEssentials"
-
-compileJava.options.encoding = 'UTF-8'
 
 minecraft {
     version = "1.8.9-11.15.1.1855"
@@ -69,6 +64,7 @@ reobf {
 
 compileJava {
     dependsOn updateLabymodApi
+    options.encoding = 'UTF-8'
     sourceCompatibility = '1.8'
     targetCompatibility = '1.8'
 }
