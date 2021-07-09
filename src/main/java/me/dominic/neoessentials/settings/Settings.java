@@ -35,6 +35,8 @@ public class Settings {
     private boolean pauseOnItemRemover = false;
     private boolean autoUpdateAddon = true;
     private boolean emulateMysteryMod = true;
+    private boolean labymodUpdater = true;
+    public boolean fixLabymodUpdater = false;
 
     public void loadSettings() {
         // TODO: Add graphical settings
@@ -87,6 +89,12 @@ public class Settings {
         if(getConfig().has("emulateMysteryMod"))
             emulateMysteryMod = getConfig().get("emulateMysteryMod").getAsBoolean();
 
+        if(getConfig().has("labymodUpdater"))
+            labymodUpdater = getConfig().get("labymodUpdater").getAsBoolean();
+
+        if(getConfig().has("fixLabymodUpdater"))
+            fixLabymodUpdater = getConfig().get("fixLabymodUpdater").getAsBoolean();
+
         if(logChat) getHelper().initChatLog();
     }
 
@@ -99,6 +107,22 @@ public class Settings {
         }, autoUpdateAddon);
         autoUpdateAddonBtn.setDescriptionText("Addon beim beenden automatisch aktualisieren");
         settings.add(autoUpdateAddonBtn);
+
+        final BooleanElement labymodUpdaterBtn = new BooleanElement("LabyMod Updates", new ControlElement.IconData("labymod/textures/buttons/update.png"), enabled -> {
+            labymodUpdater = enabled;
+            getConfig().addProperty("labymodUpdater", enabled);
+            saveConfig();
+        }, labymodUpdater);
+        labymodUpdaterBtn.setDescriptionText("Hiermit können die automatischen LabyMod Updates deaktiviert werden (Addons aus dem Store inbegriffen)");
+        settings.add(labymodUpdaterBtn);
+
+        final BooleanElement fixLabymodUpdaterBtn = new BooleanElement("LabyMod Updater MultiMC unterstützung", new ControlElement.IconData("labymod/textures/buttons/update.png"), enabled -> {
+            fixLabymodUpdater = enabled;
+            getConfig().addProperty("fixLabymodUpdater", enabled);
+            saveConfig();
+        }, fixLabymodUpdater);
+        fixLabymodUpdaterBtn.setDescriptionText("Behebt einen Fehler im LabyMod Updater der dafür sorgt, dass Updates mit MultiMC fehlschlagen (Mit MacOS nicht getestet!)");
+        settings.add(fixLabymodUpdaterBtn);
 
         final DropDownMenu<EnumAutoColor> autoColorDropdownMenu = new DropDownMenu<EnumAutoColor>("Chat Farbe", 0, 0, 0, 0)
                 .fill(EnumAutoColor.values());
@@ -345,5 +369,13 @@ public class Settings {
 
     public boolean isEmulateMysteryMod() {
         return emulateMysteryMod;
+    }
+
+    public boolean isLabymodUpdater() {
+        return labymodUpdater;
+    }
+
+    public boolean isFixLabymodUpdater() {
+        return fixLabymodUpdater;
     }
 }

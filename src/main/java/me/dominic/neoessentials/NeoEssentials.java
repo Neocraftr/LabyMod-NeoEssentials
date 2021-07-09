@@ -14,6 +14,10 @@ import net.labymod.api.permissions.PermissionsListener;
 import net.labymod.ingamechat.IngameChatManager;
 import net.labymod.main.LabyMod;
 import net.labymod.settings.elements.SettingsElement;
+import net.minecraft.client.Minecraft;
+
+import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.text.SimpleDateFormat;
@@ -46,22 +50,31 @@ public class NeoEssentials extends LabyModAddon {
         getApi().getEventManager().register(new ChatReceiveListener());
         getApi().getEventManager().register(new PluginMessageListener());
         getApi().getEventManager().register(new ServerMessageListener());
+        getApi().getEventManager().registerShutdownHook(new ShutdownHook());
         //getApi().getEventManager().registerOnAddonDevelopmentPacket(new AddonDevelopmentListener());
         getApi().registerForgeListener(new Events());
         registerEvent(new CommandListener());
 
+        try {
+            System.out.println("Minecraft Path: "+ new File(Minecraft.getMinecraft().mcDataDir, "/..").getCanonicalPath());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         try {
+            // RegEx chatfilters
             Field ingameChatManagerField = IngameChatManager.class.getDeclaredField("INSTANCE");
             Field ingameChatManagerModifiers = Field.class.getDeclaredField("modifiers");
             ingameChatManagerModifiers.setAccessible(true);
             ingameChatManagerModifiers.setInt(ingameChatManagerField, ingameChatManagerField.getModifiers() & ~Modifier.FINAL);
             ingameChatManagerField.set(null, new CustomIngameChatManager());
 
+            // Hide installed addons
             Field labyModApiField = LabyMod.class.getDeclaredField("labyModAPI");
             labyModApiField.setAccessible(true);
             labyModApiField.set(LabyMod.getInstance(), new CustomLabyModAPI(LabyMod.getInstance()));
 
+            // Bypass server permissions
             Field serverMessageListenerField = EventManager.class.getDeclaredField("serverMessage");
             serverMessageListenerField.setAccessible(true);
             Set<ServerMessageEvent> serverMessageListeners = (Set<ServerMessageEvent>) serverMessageListenerField.get(getApi().getEventManager());
@@ -74,6 +87,12 @@ public class NeoEssentials extends LabyModAddon {
                     iterator.remove();
                 }
             }
+
+            // Disable default LabyMod updater
+            Field shutdownHookField = EventManager.class.getDeclaredField("shutdownHook");
+            shutdownHookField.setAccessible(true);
+            Set<Runnable> shutdownHooks = (Set<Runnable>) shutdownHookField.get(getNeoEssentials().getApi().getEventManager());
+            shutdownHooks.removeIf(shutdownHook -> shutdownHook.getClass().getName().startsWith("net.labymod.main.update.Updater"));
         } catch (NoSuchFieldException | IllegalAccessException e) {
             e.printStackTrace();
         }
