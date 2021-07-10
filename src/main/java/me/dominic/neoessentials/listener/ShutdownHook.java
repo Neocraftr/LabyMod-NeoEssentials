@@ -51,7 +51,6 @@ public class ShutdownHook implements Runnable {
             arguments.add("-jar");
             arguments.add(new File("LabyMod/Updater.jar").getAbsolutePath());
             arguments.add("run");
-            System.out.println(arguments);
             ProcessBuilder pb = new ProcessBuilder(arguments);
             pb.environment().put("APPDATA", minecraftDirectory);
             try {

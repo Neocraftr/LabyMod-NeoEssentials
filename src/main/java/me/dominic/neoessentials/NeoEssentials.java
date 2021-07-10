@@ -14,10 +14,6 @@ import net.labymod.api.permissions.PermissionsListener;
 import net.labymod.ingamechat.IngameChatManager;
 import net.labymod.main.LabyMod;
 import net.labymod.settings.elements.SettingsElement;
-import net.minecraft.client.Minecraft;
-
-import java.io.File;
-import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.text.SimpleDateFormat;
@@ -54,12 +50,6 @@ public class NeoEssentials extends LabyModAddon {
         //getApi().getEventManager().registerOnAddonDevelopmentPacket(new AddonDevelopmentListener());
         getApi().registerForgeListener(new Events());
         registerEvent(new CommandListener());
-
-        try {
-            System.out.println("Minecraft Path: "+ new File(Minecraft.getMinecraft().mcDataDir, "/..").getCanonicalPath());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
         try {
             // RegEx chatfilters
