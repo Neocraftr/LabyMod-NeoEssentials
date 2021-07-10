@@ -58,7 +58,7 @@ public class Helper {
 
     public void logChatMessage(String msg) {
         if(getChatLogWriter() == null) return;
-        final String time = new SimpleDateFormat("mm:HH:ss").format(new Date());
+        final String time = new SimpleDateFormat("HH:mm:ss").format(new Date());
         try {
             getChatLogWriter().append("["+time+"] "+msg+"\n");
             getChatLogWriter().flush();
