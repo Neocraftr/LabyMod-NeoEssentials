@@ -30,7 +30,7 @@ configurations {
 }
 
 dependencies {
-    shade "org.mariuszgromada.math:MathParser.org-mXparser:4.0.0"
+    shade 'org.mariuszgromada.math:MathParser.org-mXparser:4.4.2'
     compile files("${rootDir.getAbsolutePath()}/libs/lm_api_mc1.8.9.jar")
 }
 
