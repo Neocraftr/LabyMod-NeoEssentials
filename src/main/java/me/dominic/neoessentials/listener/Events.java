@@ -33,24 +33,24 @@ public class Events {
 
     @SubscribeEvent
     public void onKeyInput(InputEvent.KeyInputEvent e) {
-        if(getSettings().getAutoBreakKey() != -1 && Keyboard.isKeyDown(getSettings().getAutoBreakKey())) {
+        if(getSettings().getAutoBreakKey() != -1 && getHelper().isKeyDown(getSettings().getAutoBreakKey())) {
             boolean state = !getHelper().isAutoBreakActive();
             getHelper().setAutoBreakActive(state);
             KeyBinding.setKeyBindState(getMC().gameSettings.keyBindAttack.getKeyCode(), state);
         }
-        if(getSettings().getAutoUseKey() != -1 && Keyboard.isKeyDown(getSettings().getAutoUseKey())) {
+        if(getSettings().getAutoUseKey() != -1 && getHelper().isKeyDown(getSettings().getAutoUseKey())) {
             boolean state = !getHelper().isAutoUseActive();
             getHelper().setAutoUseActive(state);
             KeyBinding.setKeyBindState(getMC().gameSettings.keyBindUseItem.getKeyCode(), state);
         }
-        if(getSettings().getUngrabMouseKey() != -1 && Keyboard.isKeyDown(getSettings().getUngrabMouseKey())) {
+        if(getSettings().getUngrabMouseKey() != -1 && getHelper().isKeyDown(getSettings().getUngrabMouseKey())) {
             if(getHelper().isMouseUngrabbed()) {
                 getHelper().regrabMouse();
             } else {
                 getHelper().ungrabMouse();
             }
         }
-        if(getSettings().getFreecamKey() != -1 && Keyboard.isKeyDown(getSettings().getFreecamKey())) {
+        if(getSettings().getFreecamKey() != -1 && getHelper().isKeyDown(getSettings().getFreecamKey())) {
             if(getHelper().isFreecamActive()) {
                 getHelper().setFreecamActive(false);
                 getMC().setRenderViewEntity(getMC().thePlayer);
@@ -93,7 +93,7 @@ public class Events {
                 }
             }
             if(getSettings().getDropAllKey() != -1) {
-                if(Keyboard.isKeyDown(getSettings().getDropAllKey()) && getMC().currentScreen instanceof GuiContainer) {
+                if(getHelper().isKeyDown(getSettings().getDropAllKey()) && getMC().currentScreen instanceof GuiContainer) {
                     if(!dropAllButtonPressed) {
                         try {
                             dropAllButtonPressed = true;
@@ -152,22 +152,22 @@ public class Events {
                 cam.rotationYawHead = getMC().thePlayer.rotationYawHead;
                 cam.rotationPitch = getMC().thePlayer.rotationPitch;
 
-                if(Keyboard.isKeyDown(getMC().gameSettings.keyBindForward.getKeyCode())) {
+                if(getHelper().isKeyDown(getMC().gameSettings.keyBindForward.getKeyCode())) {
                     cam.setPosition(cam.posX + Math.sin(-Math.toRadians(cam.rotationYaw)), cam.posY, cam.posZ + Math.cos(-Math.toRadians(cam.rotationYaw)));
                 }
-                if(Keyboard.isKeyDown(getMC().gameSettings.keyBindBack.getKeyCode())) {
+                if(getHelper().isKeyDown(getMC().gameSettings.keyBindBack.getKeyCode())) {
                     cam.setPosition(cam.posX - Math.sin(-Math.toRadians(cam.rotationYaw)), cam.posY, cam.posZ - Math.cos(-Math.toRadians(cam.rotationYaw)));
                 }
-                if(Keyboard.isKeyDown(getMC().gameSettings.keyBindRight.getKeyCode())) {
+                if(getHelper().isKeyDown(getMC().gameSettings.keyBindRight.getKeyCode())) {
                     cam.setPosition(cam.posX + Math.sin(-Math.toRadians(cam.rotationYaw + 90)), cam.posY, cam.posZ + Math.cos(-Math.toRadians(cam.rotationYaw + 90)));
                 }
-                if(Keyboard.isKeyDown(getMC().gameSettings.keyBindLeft.getKeyCode())) {
+                if(getHelper().isKeyDown(getMC().gameSettings.keyBindLeft.getKeyCode())) {
                     cam.setPosition(cam.posX - Math.sin(-Math.toRadians(cam.rotationYaw + 90)), cam.posY, cam.posZ - Math.cos(-Math.toRadians(cam.rotationYaw + 90)));
                 }
-                if(Keyboard.isKeyDown(getMC().gameSettings.keyBindJump.getKeyCode())) {
+                if(getHelper().isKeyDown(getMC().gameSettings.keyBindJump.getKeyCode())) {
                     cam.posY = cam.posY + 1;
                 }
-                if(Keyboard.isKeyDown(getMC().gameSettings.keyBindSneak.getKeyCode())) {
+                if(getHelper().isKeyDown(getMC().gameSettings.keyBindSneak.getKeyCode())) {
                     cam.posY = cam.posY - 1;
                 }
             }

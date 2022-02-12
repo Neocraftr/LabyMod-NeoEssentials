@@ -9,6 +9,7 @@ import me.dominic.neoessentials.NeoEssentials;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityOtherPlayerMP;
 import net.minecraft.util.MouseHelper;
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
 import java.io.*;
@@ -190,6 +191,10 @@ public class Helper {
                     TimeUnit.MILLISECONDS.toDays(time),
                     TimeUnit.MILLISECONDS.toHours(time) % TimeUnit.DAYS.toHours(1));
         }
+    }
+
+    public boolean isKeyDown(int key) {
+        return key != -1 && (key >= 0 ? Keyboard.isKeyDown(key) : Mouse.isButtonDown(key + 100));
     }
 
     private Minecraft getMC() {
