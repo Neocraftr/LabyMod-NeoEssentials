@@ -1,6 +1,8 @@
 # NeoEssentials
 Adds some useful things to LabyMod.
 
+**Version:** LabyMod 1.8.9 Vanilla / Forge
+
 **Download:** https://github.com/Neocraftr/LabyMod-NeoEssentials/releases/latest
 
 ### Features:
