@@ -16,7 +16,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
-import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
 import java.lang.reflect.InvocationTargetException;
@@ -26,7 +25,7 @@ import java.util.TimerTask;
 
 public class Events {
 
-    private final String getSlotMethodName = LabyModCoreMod.isObfuscated() ? "func_146975_c" : "getSlotAtPosition";
+    private final String getSlotMethodName = LabyModCoreMod.isObfuscated() ? "c" : "getSlotAtPosition";
 
     private boolean afkMenuOpen;
     private boolean dropAllButtonPressed;
