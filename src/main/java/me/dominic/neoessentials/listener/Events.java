@@ -25,7 +25,7 @@ import java.util.TimerTask;
 
 public class Events {
 
-    private final String getSlotMethodName = LabyModCoreMod.isObfuscated() ? "c" : "getSlotAtPosition";
+    private final String getSlotMethodName = LabyModCoreMod.isObfuscated() ? (LabyModCoreMod.isForge() ? "func_146975_c" : "c") : "getSlotAtPosition";
 
     private boolean afkMenuOpen;
     private boolean dropAllButtonPressed;
