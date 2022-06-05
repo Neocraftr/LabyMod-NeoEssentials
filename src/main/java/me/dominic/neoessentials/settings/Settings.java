@@ -37,6 +37,7 @@ public class Settings {
     private boolean emulateMysteryMod = true;
     private boolean labymodUpdater = true;
     public boolean fixLabymodUpdater = false;
+    public boolean showAnvilCost = true;
 
     public void loadSettings() {
         // TODO: Add graphical settings
@@ -94,6 +95,9 @@ public class Settings {
 
         if(getConfig().has("fixLabymodUpdater"))
             fixLabymodUpdater = getConfig().get("fixLabymodUpdater").getAsBoolean();
+
+        if(getConfig().has("showAnvilCost"))
+            showAnvilCost = getConfig().get("showAnvilCost").getAsBoolean();
 
         if(logChat) getHelper().initChatLog();
     }
@@ -224,6 +228,18 @@ public class Settings {
         });
         openLogDirBtn.setDescriptionText("Ordner mit Chatverläufen anzeigen");
         settings.add(openLogDirBtn);
+
+        final BooleanElement showAnvilCostBtn = new BooleanElement("Amboslevel anzeigen",
+                new ControlElement.IconData(Material.EXP_BOTTLE), new Consumer<Boolean>() {
+            @Override
+            public void accept(Boolean enabled) {
+                showAnvilCost = enabled;
+                getConfig().addProperty("showAnvilCost", enabled);
+                saveConfig();
+            }
+        }, showAnvilCost);
+        showAnvilCostBtn.setDescriptionText("Zeigt die für die nächste Reperatur im Ambos benötigten Level an");
+        settings.add(showAnvilCostBtn);
 
         final BooleanElement bypassServerPermissionsBtn = new BooleanElement("Server Rechte umgehen",
                 new ControlElement.IconData(Material.COMMAND), new Consumer<Boolean>() {
@@ -377,5 +393,9 @@ public class Settings {
 
     public boolean isFixLabymodUpdater() {
         return fixLabymodUpdater;
+    }
+
+    public boolean isShowAnvilCost() {
+        return showAnvilCost;
     }
 }
