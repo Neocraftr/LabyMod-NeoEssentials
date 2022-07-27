@@ -2,8 +2,6 @@ package me.dominic.neoessentials;
 
 import me.dominic.neoessentials.listener.*;
 import me.dominic.neoessentials.settings.Settings;
-import me.dominic.neoessentials.custom.CustomIngameChatManager;
-import me.dominic.neoessentials.custom.CustomLabyModAPI;
 import me.dominic.neoessentials.utils.Helper;
 import me.dominic.neoessentials.utils.Updater;
 import net.labymod.addon.AddonLoader;
@@ -11,11 +9,8 @@ import net.labymod.api.EventManager;
 import net.labymod.api.LabyModAddon;
 import net.labymod.api.events.ServerMessageEvent;
 import net.labymod.api.permissions.PermissionsListener;
-import net.labymod.ingamechat.IngameChatManager;
-import net.labymod.main.LabyMod;
 import net.labymod.settings.elements.SettingsElement;
 import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -47,23 +42,10 @@ public class NeoEssentials extends LabyModAddon {
         getApi().getEventManager().register(new PluginMessageListener());
         getApi().getEventManager().register(new ServerMessageListener());
         getApi().getEventManager().registerShutdownHook(new ShutdownHook());
-        //getApi().getEventManager().registerOnAddonDevelopmentPacket(new AddonDevelopmentListener());
         getApi().registerForgeListener(new Events());
         registerEvent(new CommandListener());
 
         try {
-            // RegEx chatfilters
-            Field ingameChatManagerField = IngameChatManager.class.getDeclaredField("INSTANCE");
-            Field ingameChatManagerModifiers = Field.class.getDeclaredField("modifiers");
-            ingameChatManagerModifiers.setAccessible(true);
-            ingameChatManagerModifiers.setInt(ingameChatManagerField, ingameChatManagerField.getModifiers() & ~Modifier.FINAL);
-            ingameChatManagerField.set(null, new CustomIngameChatManager());
-
-            // Hide installed addons
-            Field labyModApiField = LabyMod.class.getDeclaredField("labyModAPI");
-            labyModApiField.setAccessible(true);
-            labyModApiField.set(LabyMod.getInstance(), new CustomLabyModAPI(LabyMod.getInstance()));
-
             // Bypass server permissions
             Field serverMessageListenerField = EventManager.class.getDeclaredField("serverMessage");
             serverMessageListenerField.setAccessible(true);
