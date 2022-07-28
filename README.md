@@ -17,15 +17,13 @@ Adds some useful things to LabyMod.
 - Option to spoof MysteryMod for extra money drops
 - Freecam
 - Chat logging
-- Use regular expressions in chat filter (e.g. _/^\[ClearLagg\] Items on the floor will be removed in .{1,2}s\!$/_)
 
 ### Commands:
 - **.rainbow \<message\>** - Send message in rainbow colors
 - **.chatlog** - Open the current chatlog
-- **.colordebug** - Save the last 60 chat messages with colors (for debug purposes)
+- **.colordebug** - Save the last 100 chat messages with colors (for debug purposes)
 - **.uuid \<name\>** - Show the uuid of a player
 - **.schedule \[...\]** - Create schedules to automatically send chat messages / commands
-- **.calculate \<equation\>** or **\/calc \<equation\>** - Ingame calculator
-
+- 
 ### Disclaimer:
 This addon adds features to Minecraft for which you can get banned from certain servers. Use at your own risk!

@@ -7,12 +7,10 @@ buildscript {
     }
     dependencies {
         classpath "net.minecraftforge.gradle:ForgeGradle:2.1-SNAPSHOT"
-        classpath "com.github.jengelman.gradle.plugins:shadow:4.0.4"
         classpath "de.undercouch:gradle-download-task:4.1.1"
     }
 }
 apply plugin: "net.minecraftforge.gradle.forge"
-apply plugin: "com.github.johnrengelman.shadow"
 apply plugin: "de.undercouch.download"
 
 group = "de.neocraftr.neoessentials"
@@ -24,13 +22,7 @@ minecraft {
     mappings = "stable_20"
 }
 
-configurations {
-    shade
-    compile.extendsFrom shade
-}
-
 dependencies {
-    shade 'org.mariuszgromada.math:MathParser.org-mXparser:4.4.2'
     compile files("${rootDir.getAbsolutePath()}/libs/lm_api_mc1.8.9.jar")
 }
 
@@ -44,14 +36,6 @@ task updateLabymodApi() {
             src "http://dl.labymod.net/latest/api/files/lm_api_mc1.8.9.jar"
             dest out
             onlyIfModified true
-        }
-    }
-}
-
-jar {
-    configurations.shade.each { dep ->
-        from(project.zipTree(dep)){
-            exclude 'META-INF', 'META-INF/**'
         }
     }
 }

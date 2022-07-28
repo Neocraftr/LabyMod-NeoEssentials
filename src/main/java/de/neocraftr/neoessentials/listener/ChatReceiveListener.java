@@ -22,7 +22,7 @@ public class ChatReceiveListener implements MessageReceiveEvent {
         }
 
         getHelper().getLastFormatedChatMessages().add(msgRaw);
-        while(getHelper().getLastFormatedChatMessages().size() > 60) {
+        while(getHelper().getLastFormatedChatMessages().size() > 100) {
             getHelper().getLastFormatedChatMessages().remove(0);
         }
 

@@ -8,7 +8,6 @@ import net.minecraft.event.ClickEvent;
 import net.minecraft.event.HoverEvent;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatStyle;
-import org.mariuszgromada.math.mxparser.Expression;
 
 import java.awt.*;
 import java.io.BufferedWriter;
@@ -208,19 +207,6 @@ public class CommandListener implements ClientCommandEvent {
             } else {
                 getNeoEssentials().getApi().displayMessageInChat(NeoEssentials.PREFIX+"§cVerwendung: .schedule <create|delete|list|start|stop> [...]");
             }
-            return true;
-        }
-
-        // Calculate
-        if(cmd.equalsIgnoreCase("calculate") || cmd.equalsIgnoreCase("calc")) {
-            if (args.length == 1) {
-                Expression e = new Expression(args[0]);
-                if (e.checkSyntax()) {
-                    getNeoEssentials().getApi().displayMessageInChat(NeoEssentials.PREFIX + "§e" + args[0] + "=§a" + e.calculate());
-                } else {
-                    getNeoEssentials().getApi().displayMessageInChat(NeoEssentials.PREFIX + "§cBitte gib eine gültige Rechenaufgabe an.");
-                }
-            } else getNeoEssentials().getApi().displayMessageInChat(NeoEssentials.PREFIX + "§cVerwendung: .calculate <Rechenaufgabe>");
             return true;
         }
         return false;
