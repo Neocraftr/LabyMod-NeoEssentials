@@ -1,10 +1,10 @@
-package me.dominic.neoessentials.settings;
+package de.neocraftr.neoessentials.settings;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import me.dominic.neoessentials.NeoEssentials;
-import me.dominic.neoessentials.enums.EnumAutoColor;
-import me.dominic.neoessentials.utils.Helper;
+import de.neocraftr.neoessentials.enums.EnumAutoColor;
+import de.neocraftr.neoessentials.NeoEssentials;
+import de.neocraftr.neoessentials.utils.Helper;
 import net.labymod.gui.elements.DropDownMenu;
 import net.labymod.settings.elements.*;
 import net.labymod.utils.Consumer;

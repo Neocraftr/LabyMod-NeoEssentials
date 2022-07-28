@@ -1,10 +1,10 @@
-package me.dominic.neoessentials.listener;
+package de.neocraftr.neoessentials.listener;
 
 import com.google.common.base.Charsets;
+import de.neocraftr.neoessentials.NeoEssentials;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.handler.codec.DecoderException;
-import me.dominic.neoessentials.NeoEssentials;
 import net.labymod.api.events.PluginMessageEvent;
 import net.labymod.support.util.Debug;
 import net.minecraft.network.PacketBuffer;

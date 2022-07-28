@@ -1,4 +1,4 @@
-package me.dominic.neoessentials.asm;
+package de.neocraftr.neoessentials.asm;
 
 import net.labymod.core.asm.LabyModCoreMod;
 import net.minecraft.launchwrapper.IClassTransformer;
@@ -42,7 +42,7 @@ public class NeoEssentialsTransformer implements IClassTransformer {
                         list.add(new VarInsnNode(Opcodes.ALOAD, 1));
                         list.add(new VarInsnNode(Opcodes.ALOAD, 3));
                         list.add(new VarInsnNode(Opcodes.ILOAD, 2));
-                        list.add(new MethodInsnNode(Opcodes.INVOKESTATIC, "me/dominic/neoessentials/utils/BytecodeMethods", "onItemToolTip", onTooltipDesc, false));
+                        list.add(new MethodInsnNode(Opcodes.INVOKESTATIC, "de/neocraftr/neoessentials/utils/BytecodeMethods", "onItemToolTip", onTooltipDesc, false));
                         methodNode.instructions.insert(methodNode.instructions.getLast().getPrevious().getPrevious(), list);
                     });
         }
@@ -60,7 +60,7 @@ public class NeoEssentialsTransformer implements IClassTransformer {
                         InsnList list = new InsnList();
                         list.add(new VarInsnNode(Opcodes.ALOAD, 1));
                         list.add(new VarInsnNode(Opcodes.ALOAD, 2));
-                        list.add(new MethodInsnNode(Opcodes.INVOKESTATIC, "me/dominic/neoessentials/utils/BytecodeMethods", "onSendMessageToServer", "(Ljava/lang/String;Lcom/google/gson/JsonElement;)V", false));
+                        list.add(new MethodInsnNode(Opcodes.INVOKESTATIC, "de/neocraftr/neoessentials/utils/BytecodeMethods", "onSendMessageToServer", "(Ljava/lang/String;Lcom/google/gson/JsonElement;)V", false));
                         methodNode.instructions.insert(nextNode.get(), list);
                     });
         }

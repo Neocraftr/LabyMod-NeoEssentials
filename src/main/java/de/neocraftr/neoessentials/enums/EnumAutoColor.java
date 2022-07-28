@@ -1,4 +1,4 @@
-package me.dominic.neoessentials.enums;
+package de.neocraftr.neoessentials.enums;
 
 public enum EnumAutoColor {
     DEFAULT(""),

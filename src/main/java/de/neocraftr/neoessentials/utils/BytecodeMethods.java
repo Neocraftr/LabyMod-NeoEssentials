@@ -1,9 +1,9 @@
-package me.dominic.neoessentials.utils;
+package de.neocraftr.neoessentials.utils;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import me.dominic.neoessentials.NeoEssentials;
+import de.neocraftr.neoessentials.NeoEssentials;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 

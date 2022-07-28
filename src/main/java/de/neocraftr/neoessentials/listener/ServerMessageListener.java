@@ -1,9 +1,9 @@
-package me.dominic.neoessentials.listener;
+package de.neocraftr.neoessentials.listener;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import me.dominic.neoessentials.NeoEssentials;
-import me.dominic.neoessentials.settings.Settings;
+import de.neocraftr.neoessentials.NeoEssentials;
+import de.neocraftr.neoessentials.settings.Settings;
 import net.labymod.api.events.ServerMessageEvent;
 import net.labymod.api.permissions.Permissions.Permission;
 

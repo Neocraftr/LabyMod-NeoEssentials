@@ -1,11 +1,11 @@
-package me.dominic.neoessentials.utils;
+package de.neocraftr.neoessentials.utils;
 
 import com.google.common.io.Resources;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
-import me.dominic.neoessentials.NeoEssentials;
+import de.neocraftr.neoessentials.NeoEssentials;
 import org.apache.commons.io.FileUtils;
 
 import java.io.BufferedReader;

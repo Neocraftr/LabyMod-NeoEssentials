@@ -1,8 +1,8 @@
-package me.dominic.neoessentials.listener;
+package de.neocraftr.neoessentials.listener;
 
-import me.dominic.neoessentials.NeoEssentials;
-import me.dominic.neoessentials.utils.Helper;
-import me.dominic.neoessentials.utils.Schedule;
+import de.neocraftr.neoessentials.NeoEssentials;
+import de.neocraftr.neoessentials.utils.Schedule;
+import de.neocraftr.neoessentials.utils.Helper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.event.ClickEvent;
 import net.minecraft.event.HoverEvent;

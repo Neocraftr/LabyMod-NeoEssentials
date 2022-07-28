@@ -1,4 +1,4 @@
-package me.dominic.neoessentials.settings;
+package de.neocraftr.neoessentials.settings;
 
 import net.labymod.core.LabyModCore;
 import net.labymod.main.LabyMod;

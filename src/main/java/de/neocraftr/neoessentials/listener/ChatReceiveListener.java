@@ -1,8 +1,8 @@
-package me.dominic.neoessentials.listener;
+package de.neocraftr.neoessentials.listener;
 
-import me.dominic.neoessentials.settings.Settings;
-import me.dominic.neoessentials.utils.Helper;
-import me.dominic.neoessentials.NeoEssentials;
+import de.neocraftr.neoessentials.settings.Settings;
+import de.neocraftr.neoessentials.utils.Helper;
+import de.neocraftr.neoessentials.NeoEssentials;
 import net.labymod.api.events.MessageReceiveEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;

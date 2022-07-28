@@ -1,11 +1,11 @@
-package me.dominic.neoessentials.utils;
+package de.neocraftr.neoessentials.utils;
 
 import com.google.common.base.CharMatcher;
 import com.google.common.io.Resources;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.stream.JsonReader;
-import me.dominic.neoessentials.NeoEssentials;
+import de.neocraftr.neoessentials.NeoEssentials;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityOtherPlayerMP;
 import net.minecraft.util.MouseHelper;

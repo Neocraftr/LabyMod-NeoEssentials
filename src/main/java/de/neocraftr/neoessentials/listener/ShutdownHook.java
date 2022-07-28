@@ -1,6 +1,6 @@
-package me.dominic.neoessentials.listener;
+package de.neocraftr.neoessentials.listener;
 
-import me.dominic.neoessentials.NeoEssentials;
+import de.neocraftr.neoessentials.NeoEssentials;
 import net.labymod.main.LabyMod;
 import net.labymod.main.update.Updater;
 import net.minecraft.client.Minecraft;

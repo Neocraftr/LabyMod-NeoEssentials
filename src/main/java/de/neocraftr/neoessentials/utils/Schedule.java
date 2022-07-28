@@ -1,4 +1,4 @@
-package me.dominic.neoessentials.utils;
+package de.neocraftr.neoessentials.utils;
 
 import net.minecraft.client.Minecraft;
 

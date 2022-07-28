@@ -6,6 +6,6 @@
   "icon": "https://minotar.net/avatar/fe2b30271d4c474abe242fc3f1e6f143",
   "version": 1,
   "category": 2,
-  "mainClass": "me.dominic.neoessentials.NeoEssentials",
-  "transformerClass": "me.dominic.neoessentials.asm.NeoEssentialsTransformer"
+  "mainClass": "de.neocraftr.neoessentials.NeoEssentials",
+  "transformerClass": "de.neocraftr.neoessentials.asm.NeoEssentialsTransformer"
 }

@@ -1,8 +1,8 @@
-package me.dominic.neoessentials.listener;
+package de.neocraftr.neoessentials.listener;
 
-import me.dominic.neoessentials.enums.EnumAutoColor;
-import me.dominic.neoessentials.settings.Settings;
-import me.dominic.neoessentials.NeoEssentials;
+import de.neocraftr.neoessentials.enums.EnumAutoColor;
+import de.neocraftr.neoessentials.settings.Settings;
+import de.neocraftr.neoessentials.NeoEssentials;
 import net.labymod.api.events.MessageSendEvent;
 import net.minecraft.client.Minecraft;
 import java.util.*;

@@ -15,7 +15,7 @@ apply plugin: "net.minecraftforge.gradle.forge"
 apply plugin: "com.github.johnrengelman.shadow"
 apply plugin: "de.undercouch.download"
 
-group = "me.dominic.neoessentials"
+group = "de.neocraftr.neoessentials"
 archivesBaseName = "NeoEssentials"
 
 minecraft {

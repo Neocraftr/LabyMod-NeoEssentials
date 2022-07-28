@@ -1,9 +1,9 @@
-package me.dominic.neoessentials;
+package de.neocraftr.neoessentials;
 
-import me.dominic.neoessentials.listener.*;
-import me.dominic.neoessentials.settings.Settings;
-import me.dominic.neoessentials.utils.Helper;
-import me.dominic.neoessentials.utils.Updater;
+import de.neocraftr.neoessentials.listener.*;
+import de.neocraftr.neoessentials.settings.Settings;
+import de.neocraftr.neoessentials.utils.Helper;
+import de.neocraftr.neoessentials.utils.Updater;
 import net.labymod.addon.AddonLoader;
 import net.labymod.api.EventManager;
 import net.labymod.api.LabyModAddon;
