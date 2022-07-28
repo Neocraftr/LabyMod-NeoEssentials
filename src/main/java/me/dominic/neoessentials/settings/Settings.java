@@ -29,15 +29,15 @@ public class Settings {
     private int dropAllKey = Keyboard.KEY_A;
     private int freecamKey = Keyboard.KEY_V;
     private boolean logChat = true;
-    private boolean bypassServerPermissions = false;
-    private boolean hideAddons = false;
-    private boolean antiAfkKick = false;
+    private boolean bypassServerPermissions = true;
+    private boolean hideAddons = true;
+    private boolean antiAfkKick = true;
     private boolean pauseOnItemRemover = false;
     private boolean autoUpdateAddon = true;
     private boolean emulateMysteryMod = true;
     private boolean labymodUpdater = true;
-    public boolean fixLabymodUpdater = false;
-    public boolean showAnvilCost = true;
+    private boolean fixLabymodUpdater = false;
+    private boolean showAnvilCost = true;
 
     public void loadSettings() {
         // TODO: Add graphical settings
@@ -128,9 +128,9 @@ public class Settings {
         fixLabymodUpdaterBtn.setDescriptionText("Behebt einen Fehler im LabyMod Updater der dafür sorgt, dass Updates mit MultiMC fehlschlagen (Mit MacOS nicht getestet!)");
         settings.add(fixLabymodUpdaterBtn);
 
-        final DropDownMenu<EnumAutoColor> autoColorDropdownMenu = new DropDownMenu<EnumAutoColor>("Chat Farbe", 0, 0, 0, 0)
+        final DropDownMenu<EnumAutoColor> autoColorDropdownMenu = new DropDownMenu<EnumAutoColor>("Automatische Chat Farbe", 0, 0, 0, 0)
                 .fill(EnumAutoColor.values());
-        final DropDownElement<EnumAutoColor> autoColorDropdown = new DropDownElement<EnumAutoColor>("Chat Farbe", autoColorDropdownMenu);
+        final DropDownElement<EnumAutoColor> autoColorDropdown = new DropDownElement<EnumAutoColor>("Automatische Chat Farbe", autoColorDropdownMenu);
         autoColorDropdownMenu.setSelected(autoColor);
         autoColorDropdown.setChangeListener(new Consumer<EnumAutoColor>() {
             @Override
@@ -187,7 +187,7 @@ public class Settings {
                 saveConfig();
             }
         });
-        dropAllOptions.setDescriptionText("Im Inventar alle Items des gewählten Types droppen (Taste gillt nur im Inventar)");
+        dropAllOptions.setDescriptionText("Im Inventar alle Items des gewählten Types droppen (nur im Inventar)");
         settings.add(dropAllOptions);
 
         final KeyElement freecamKeyOption = new KeyElement("Freecam",
@@ -241,7 +241,7 @@ public class Settings {
         showAnvilCostBtn.setDescriptionText("Zeigt die für die nächste Reperatur im Ambos benötigten Level an");
         settings.add(showAnvilCostBtn);
 
-        final BooleanElement bypassServerPermissionsBtn = new BooleanElement("Server Rechte umgehen",
+        final BooleanElement bypassServerPermissionsBtn = new BooleanElement("Deaktivierung von Funktionen verhindern",
                 new ControlElement.IconData(Material.COMMAND), new Consumer<Boolean>() {
             @Override
             public void accept(Boolean enabled) {
